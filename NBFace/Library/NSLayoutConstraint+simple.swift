@@ -11,7 +11,7 @@ import UIKit
 
 public extension NSLayoutConstraint {
     
-    static func simple(format: String, views: [String: AnyObject]) -> [NSLayoutConstraint] {
-        return NSLayoutConstraint.constraintsWithVisualFormat(format, options: [], metrics: nil, views: views)
+    static func simple(_ format: String, views: [String: AnyObject]) -> [NSLayoutConstraint] {
+        return NSLayoutConstraint.constraints(withVisualFormat: format, options: [], metrics: nil, views: views)
     }
 }

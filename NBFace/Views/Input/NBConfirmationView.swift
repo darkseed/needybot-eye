@@ -10,18 +10,18 @@ import Foundation
 
 class NBConfirmationView: NBInputView, NBInputViewConfigurable {
     
-    private let textContainer = UIView()
-    private let header = UILabel()
-    private let subheader = UILabel()
-    private let yesButton = NBIconButton(withIconID: "yes")!
-    private let noButton = NBIconButton(withIconID: "no")!
-    private let replayButton = NBIconButton(withIconID: "replay")!
+    fileprivate let textContainer = UIView()
+    fileprivate let header = UILabel()
+    fileprivate let subheader = UILabel()
+    fileprivate let yesButton = NBIconButton(withIconID: "yes")!
+    fileprivate let noButton = NBIconButton(withIconID: "no")!
+    fileprivate let replayButton = NBIconButton(withIconID: "replay")!
     
-    private let pad: CGFloat = 30
-    private let textShowingButtonsY: CGFloat = 25
-    private let lineHeight: CGFloat = 38
+    fileprivate let pad: CGFloat = 30
+    fileprivate let textShowingButtonsY: CGFloat = 25
+    fileprivate let lineHeight: CGFloat = 38
     
-    private let responseTopic = ROSTopic(topic: "/needybot/msg/response", type: "needybot/FaceResponse")
+    fileprivate let responseTopic = ROSTopic(topic: "/needybot/msg/response", type: "needybot/FaceResponse")
     
     var headerText: String? {
         get {
@@ -66,7 +66,7 @@ class NBConfirmationView: NBInputView, NBInputViewConfigurable {
     
     // MARK: - Private methods
     
-    private func addResponses() {
+    fileprivate func addResponses() {
         replayButton.addHandler(NBHandler() { _ in
             ROSTopic(topic: "/needybot/msg/replay", type: "std_msgs/Empty").publish([:])
         })
@@ -80,7 +80,7 @@ class NBConfirmationView: NBInputView, NBInputViewConfigurable {
         })
     }
     
-    func handleResponse(success: Bool) {
+    func handleResponse(_ success: Bool) {
         // keep response from being sent more than once if multiple taps
         // are triggered
         guard isActive else {
@@ -92,16 +92,16 @@ class NBConfirmationView: NBInputView, NBInputViewConfigurable {
         responseTopic.publish(response.asMsg())
     }
     
-    private func applyTextStyles(label: UILabel, _ fontsize: CGFloat) {
+    fileprivate func applyTextStyles(_ label: UILabel, _ fontsize: CGFloat) {
         label.textColor = NB.Colors.OffWhite
-        label.textAlignment = .Center
+        label.textAlignment = .center
         label.numberOfLines = 1
         label.font = UIFont(name: NB.Font.MavenProBold.rawValue, size: fontsize)
-        label.frame =  CGRectMake(
-            -frame.width * 0.5,
-            0,
-            frame.width,
-            lineHeight
+        label.frame =  CGRect(
+            x: -frame.width * 0.5,
+            y: 0,
+            width: frame.width,
+            height: lineHeight
         )
     }
     
@@ -134,8 +134,8 @@ class NBConfirmationView: NBInputView, NBInputViewConfigurable {
     }
     
     func hideText() {
-        header.hidden = true
-        subheader.hidden = true
+        header.isHidden = true
+        subheader.isHidden = true
         header.text = ""
         subheader.text = ""
         
@@ -146,8 +146,8 @@ class NBConfirmationView: NBInputView, NBInputViewConfigurable {
     }
     
     func showText() {
-        header.hidden = false
-        subheader.hidden = false
+        header.isHidden = false
+        subheader.isHidden = false
         
         // shift yes/no buttons down to accommodate text
         let radius = yesButton.radius

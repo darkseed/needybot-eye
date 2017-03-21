@@ -10,10 +10,10 @@ import Foundation
 
 struct NBPoint2DMsg: ROSMessage {
     
-    private var _x: CGFloat
-    private var _y: CGFloat
+    fileprivate var _x: CGFloat
+    fileprivate var _y: CGFloat
     
-    mutating func x(x: CGFloat? = nil) -> CGFloat {
+    mutating func x(_ x: CGFloat? = nil) -> CGFloat {
         guard let x = x else {
             return _x
         }
@@ -21,7 +21,7 @@ struct NBPoint2DMsg: ROSMessage {
         return _x
     }
     
-    mutating func y(y: CGFloat? = nil) -> CGFloat {
+    mutating func y(_ y: CGFloat? = nil) -> CGFloat {
         guard let y = y else {
             return _y
         }
@@ -29,7 +29,7 @@ struct NBPoint2DMsg: ROSMessage {
         return _y
     }
     
-    static func Create(x: CGFloat, _ y: CGFloat) -> NBPoint2DMsg {
+    static func Create(_ x: CGFloat, _ y: CGFloat) -> NBPoint2DMsg {
         return NBPoint2DMsg(_x: x, _y: y)
     }
     
@@ -39,8 +39,8 @@ struct NBPoint2DMsg: ROSMessage {
     
     func asMsg() -> [String : AnyObject] {
         return [
-            "x": _x,
-            "y": _y
+            "x": _x as AnyObject,
+            "y": _y as AnyObject
         ]
     }
 }

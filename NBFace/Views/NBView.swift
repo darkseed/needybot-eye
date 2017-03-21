@@ -12,10 +12,10 @@ import UIKit
 class NBView: UIView {
     
     func hide() {
-        hidden = true
+        isHidden = true
     }
     
     func show() {
-        hidden = false
+        isHidden = false
     }
 }

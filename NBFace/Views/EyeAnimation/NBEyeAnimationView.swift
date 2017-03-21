@@ -11,7 +11,7 @@ import UIKit
 
 class NBEyeAnimationView: UIView {
     
-    private var displayLink: CADisplayLink!
+    fileprivate var displayLink: CADisplayLink!
     
     var container: CALayer!
     var eyeLayer: CALayer!
@@ -45,9 +45,9 @@ class NBEyeAnimationView: UIView {
     }
     
     convenience init() {
-        self.init(frame: UIScreen.mainScreen().bounds)
+        self.init(frame: UIScreen.main.bounds)
         
-        backgroundColor = UIColor.clearColor()
+        backgroundColor = UIColor.clear
         // backgroundColor = UIColor(red: 0.0, green: 0.25, blue: 0.0, alpha: 1.0)
         
         corneaScale = NBAnimation.EyeValues.ScaleCorneaIdle
@@ -58,9 +58,9 @@ class NBEyeAnimationView: UIView {
         // Scale container so that eye fits within target bounds.
         // Scaling the container rather than the eye layer leaves
         // eye at it's normalized scale for doing animation.
-        let resizedEyeFrame = NB.ResizingBehavior.AspectFit.apply(
-            rect: CGRectMake(0, 0, eyeLayer.bounds.width, eyeLayer.bounds.height),
-            target: CGRectMake(0, 0, frame.width * 0.5, frame.height)
+        let resizedEyeFrame = NB.ResizingBehavior.aspectFit.apply(
+            rect: CGRect(x: 0, y: 0, width: eyeLayer.bounds.width, height: eyeLayer.bounds.height),
+            target: CGRect(x: 0, y: 0, width: frame.width * 0.5, height: frame.height)
         )
         let resizedEyeScale = CGSize(
             width: resizedEyeFrame.width / eyeLayer.bounds.width,
@@ -72,14 +72,14 @@ class NBEyeAnimationView: UIView {
         
         // init display link
         displayLink = CADisplayLink(target: self, selector: #selector(self.update))
-        displayLink.addToRunLoop(NSRunLoop.mainRunLoop(), forMode: NSDefaultRunLoopMode)
-        displayLink.paused = true
+        displayLink.add(to: RunLoop.main, forMode: RunLoopMode.defaultRunLoopMode)
+        displayLink.isPaused = true
         
         update()
 //        animate01()
     }
     
-    private func initLayers() {
+    fileprivate func initLayers() {
         container = CALayer()
         container.bounds = bounds
         container.position = CGPoint(x: frame.width/2, y: frame.height/2)
@@ -88,16 +88,16 @@ class NBEyeAnimationView: UIView {
         let eyePath = EyePath()
         eyeLayer = CALayer()
         eyeMaskLayer = CAShapeLayer()
-        eyeMaskLayer.fillColor = UIColor(red: 1, green: 0, blue: 0, alpha: 1).CGColor
-        eyeMaskLayer.path = eyePath.CGPath
+        eyeMaskLayer.fillColor = UIColor(red: 1, green: 0, blue: 0, alpha: 1).cgColor
+        eyeMaskLayer.path = eyePath.cgPath
         eyeLayer.bounds = eyePath.bounds
         eyeLayer.position = CGPoint(x: container.bounds.width/2, y: container.bounds.height/2)
         eyeLayer.mask = eyeMaskLayer
         container.addSublayer(eyeLayer)
 
         scleraDiffuseLayer = CAShapeLayer()
-        scleraDiffuseLayer.fillColor = EyeColors.Sclera.CGColor
-        scleraDiffuseLayer.path = eyePath.CGPath
+        scleraDiffuseLayer.fillColor = EyeColors.Sclera.cgColor
+        scleraDiffuseLayer.path = eyePath.cgPath
         eyeLayer.addSublayer(scleraDiffuseLayer)
         
         let corneaPath = CorneaPath()
@@ -105,43 +105,43 @@ class NBEyeAnimationView: UIView {
         corneaLayer.bounds = corneaPath.bounds
         corneaLayer.position = CGPoint(x: 500, y: 500)
         corneaMaskLayer = CAShapeLayer()
-        corneaMaskLayer.fillColor = UIColor(red: 1, green: 0, blue: 0, alpha: 1).CGColor
-        corneaMaskLayer.path = corneaPath.CGPath
+        corneaMaskLayer.fillColor = UIColor(red: 1, green: 0, blue: 0, alpha: 1).cgColor
+        corneaMaskLayer.path = corneaPath.cgPath
         corneaLayer.mask = corneaMaskLayer
         corneaLayer.transform = CATransform3DScale(corneaLayer.transform, corneaScale, corneaScale, 1.0)
         eyeLayer.addSublayer(corneaLayer)
         
         irisDiffuseLayer = CAShapeLayer()
-        irisDiffuseLayer.fillColor = EyeColors.IrisIdle.CGColor
-        irisDiffuseLayer.path = corneaPath.CGPath
+        irisDiffuseLayer.fillColor = EyeColors.IrisIdle.cgColor
+        irisDiffuseLayer.path = corneaPath.cgPath
         corneaLayer.addSublayer(irisDiffuseLayer)
         
         let irisOverlayPath = IrisOverlayPath()
         irisOverlayLayer = CAShapeLayer()
-        irisOverlayLayer.fillColor = EyeColors.IrisOverlay.CGColor
-        irisOverlayLayer.path = irisOverlayPath.CGPath
+        irisOverlayLayer.fillColor = EyeColors.IrisOverlay.cgColor
+        irisOverlayLayer.path = irisOverlayPath.cgPath
         irisOverlayLayer.bounds = irisOverlayPath.bounds
         irisOverlayLayer.position = CGPoint(x: 500, y: 500)
         corneaLayer.addSublayer(irisOverlayLayer)
         
         let pupilPath = PupilPath()
         pupilLayer = CAShapeLayer()
-        pupilLayer.fillColor = EyeColors.Pupil.CGColor
-        pupilLayer.path = pupilPath.CGPath
+        pupilLayer.fillColor = EyeColors.Pupil.cgColor
+        pupilLayer.path = pupilPath.cgPath
         pupilLayer.bounds = pupilPath.bounds
         pupilLayer.position = CGPoint(x: 500, y: 500)
         pupilLayer.transform = CATransform3DScale(pupilLayer.transform, pupilScale, pupilScale, 1.0)
         corneaLayer.addSublayer(pupilLayer)
         
         let highlightLayer = CAShapeLayer()
-        let highlightOuterPath = UIBezierPath(ovalInRect: CGRect(x: -292, y: -303, width: 584, height: 606))
-        let highlightInnerPath = UIBezierPath(ovalInRect: CGRect(x: -73, y: -73, width: 146, height: 146))
+        let highlightOuterPath = UIBezierPath(ovalIn: CGRect(x: -292, y: -303, width: 584, height: 606))
+        let highlightInnerPath = UIBezierPath(ovalIn: CGRect(x: -73, y: -73, width: 146, height: 146))
         let highlightOuterLayer = CAShapeLayer()
         let highlightInnerLayer = CAShapeLayer()
-        highlightOuterLayer.fillColor = UIColor(white: 1.0, alpha: 0.15).CGColor
-        highlightInnerLayer.fillColor = UIColor.whiteColor().CGColor
-        highlightOuterLayer.path = highlightOuterPath.CGPath
-        highlightInnerLayer.path = highlightInnerPath.CGPath
+        highlightOuterLayer.fillColor = UIColor(white: 1.0, alpha: 0.15).cgColor
+        highlightInnerLayer.fillColor = UIColor.white.cgColor
+        highlightOuterLayer.path = highlightOuterPath.cgPath
+        highlightInnerLayer.path = highlightInnerPath.cgPath
         highlightOuterLayer.bounds = highlightOuterPath.bounds
         highlightInnerLayer.bounds = highlightInnerPath.bounds
         highlightLayer.position = CGPoint(x: 844, y: 112);
@@ -153,10 +153,10 @@ class NBEyeAnimationView: UIView {
         let eyelidLayer = CALayer()
         eyelidUpperLayer = CAShapeLayer()
         eyelidLowerLayer = CAShapeLayer()
-        eyelidUpperLayer.fillColor = EyeColors.Eyelid.CGColor
-        eyelidLowerLayer.fillColor = EyeColors.Eyelid.CGColor
-        eyelidUpperLayer.path = EyelidPaths.UpperIdleOpen.CGPath
-        eyelidLowerLayer.path = EyelidPaths.LowerIdleOpen.CGPath
+        eyelidUpperLayer.fillColor = EyeColors.Eyelid.cgColor
+        eyelidLowerLayer.fillColor = EyeColors.Eyelid.cgColor
+        eyelidUpperLayer.path = EyelidPaths.UpperIdleOpen.cgPath
+        eyelidLowerLayer.path = EyelidPaths.LowerIdleOpen.cgPath
         eyelidUpperLayer.bounds = CGRect(x: 0, y: 0, width: 1000, height: 1000)
         eyelidLowerLayer.bounds = CGRect(x: 0, y: 0, width: 1000, height: 1000)
         eyelidLayer.addSublayer(eyelidUpperLayer)
@@ -177,18 +177,18 @@ class NBEyeAnimationView: UIView {
     }
     
     func start() {
-        displayLink.paused = false
+        displayLink.isPaused = false
     }
     
     func stop() {
-        displayLink.paused = true
+        displayLink.isPaused = true
     }
     
     func idle() {
         // go into looping idle mode
     }
     
-    func playEmotion(eyeEmotion: NB.EyeEmotion) {
+    func playEmotion(_ eyeEmotion: NB.EyeEmotion) {
         // pick animation based on emotion
         if let animation = animationsDict[eyeEmotion.rawValue] {
             // TODO: handle stopping and transitioning out existing animation
@@ -199,10 +199,10 @@ class NBEyeAnimationView: UIView {
         }
     }
     
-    static func getCorneaLookPosition(angle: CGFloat, withScale scale: CGFloat) -> CGPoint {
+    static func getCorneaLookPosition(_ angle: CGFloat, withScale scale: CGFloat) -> CGPoint {
         let corneaHalfWidth = scale * 500
         var centerOffsetPos = CGPoint(x: 490 - corneaHalfWidth, y: 0)
-        centerOffsetPos = CGPointApplyAffineTransform(centerOffsetPos, CGAffineTransformMakeRotation(angle))
+        centerOffsetPos = centerOffsetPos.applying(CGAffineTransform(rotationAngle: angle))
         return CGPoint(x: 500 + centerOffsetPos.x, y: 500 + centerOffsetPos.y)
     }
 }

@@ -10,9 +10,9 @@ import Foundation
 
 struct NBFaceRecognizeRequestMsg: ROSMessage {
     
-    private var _image: NBBase64ImageMsg
+    fileprivate var _image: NBBase64ImageMsg
     
-    mutating func image(image: NBBase64ImageMsg? = nil) -> NBBase64ImageMsg {
+    mutating func image(_ image: NBBase64ImageMsg? = nil) -> NBBase64ImageMsg {
         guard let image = image else {
             return _image
         }
@@ -28,7 +28,7 @@ struct NBFaceRecognizeRequestMsg: ROSMessage {
     
     func asMsg() -> [String : AnyObject] {
         return [
-            "image": _image.asMsg()
+            "image": _image.asMsg() as AnyObject
         ]
     }
 }

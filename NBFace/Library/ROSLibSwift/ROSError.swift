@@ -8,7 +8,7 @@
 
 import Foundation
 
-enum ROSError: ErrorType {
-    case InvalidConnectionURL
-    case InvalidMessageFormat
+enum ROSError: Error {
+    case invalidConnectionURL
+    case invalidMessageFormat
 }

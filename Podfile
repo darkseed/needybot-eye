@@ -4,9 +4,9 @@ platform :ios, '9.0'
 use_frameworks!
 
 target 'NBFace' do
-  pod 'AudioKit', :git => 'https://github.com/audiokit/AudioKit.git', :branch => 'develop'
+  pod 'AudioKit'
   pod 'SocketRocket'
-  pod 'AsyncSwift'
+  pod 'AsyncSwift', :git => "https://github.com/duemunk/Async.git"
   pod 'FLAnimatedImage', '~> 1.0'
   pod 'Yaml'
 end

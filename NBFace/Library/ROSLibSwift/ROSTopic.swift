@@ -8,15 +8,15 @@
 
 import Foundation
 
-public class ROSTopic: NSObject {
+open class ROSTopic: NSObject {
     
-    private var isAdvertised = false
+    fileprivate var isAdvertised = false
     
-    public var queueLength: Int
-    public var subscribeHandler: ROSHandler?
-    public var throttleRate: Int
-    public var topic: String
-    public var type: String
+    open var queueLength: Int
+    open var subscribeHandler: ROSHandler?
+    open var throttleRate: Int
+    open var topic: String
+    open var type: String
     
     public init(topic: String, type: String, queueLength: Int = 10, throttleRate: Int = 0) {
         self.queueLength = queueLength
@@ -26,62 +26,62 @@ public class ROSTopic: NSObject {
         super.init()
     }
     
-    public func subscribe(handler: ROSHandler) {
+    open func subscribe(_ handler: ROSHandler) {
         subscribeHandler = handler
         let message: [String: AnyObject] = [
-            "op": "subscribe",
-            "topic": topic,
-            "type": type,
-            "throttle_rate": throttleRate,
-            "queue_length": queueLength,
+            "op": "subscribe" as AnyObject,
+            "topic": topic as AnyObject,
+            "type": type as AnyObject,
+            "throttle_rate": throttleRate as AnyObject,
+            "queue_length": queueLength as AnyObject,
         ]
         ROS.sharedInstance.registerSubscriber(self)
         ROS.sharedInstance.send(ROS.objectToJSONString(message))
     }
     
-    public func unsubscribe() {
+    open func unsubscribe() {
         subscribeHandler = nil
         let message: [String: AnyObject] = [
-            "op": "unsubscribe",
-            "topic": topic
+            "op": "unsubscribe" as AnyObject,
+            "topic": topic as AnyObject
         ]
         ROS.sharedInstance.unregisterSubscriber(self)
         ROS.sharedInstance.send(ROS.objectToJSONString(message))
     }
     
-    public func advertise() {
+    open func advertise() {
         if isAdvertised {
             return
         }
         let message: [String: AnyObject] = [
-            "op": "advertise",
-            "topic": topic,
-            "type": type,
+            "op": "advertise" as AnyObject,
+            "topic": topic as AnyObject,
+            "type": type as AnyObject,
         ]
         ROS.sharedInstance.send(ROS.objectToJSONString(message))
         isAdvertised = true
     }
     
-    public func unadvertise() {
+    open func unadvertise() {
         if !isAdvertised {
             return
         }
         let message: [String: AnyObject] = [
-            "op": "unadvertise",
-            "topic": topic
+            "op": "unadvertise" as AnyObject,
+            "topic": topic as AnyObject
         ]
         ROS.sharedInstance.send(ROS.objectToJSONString(message))
         isAdvertised = false
     }
     
-    public func publish(msg: [String: AnyObject]) {
+    open func publish(_ msg: [String: AnyObject]) {
         if !isAdvertised {
             advertise()
         }
         let message: [String: AnyObject] = [
-            "op": "publish",
-            "topic": topic,
-            "msg": msg
+            "op": "publish" as AnyObject,
+            "topic": topic as AnyObject,
+            "msg": msg as AnyObject
         ]
         if topic == "/needybot/msg/response" {
             NB.log("publishing: \(message.description)")

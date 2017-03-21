@@ -25,7 +25,7 @@ class NBStore: NSObject {
     
     /// The current battery level of the iPad - a Float value between 0 and 1. (Read only)
     var batteryLevel: Float {
-        return UIDevice.currentDevice().batteryLevel
+        return UIDevice.current.batteryLevel
     }
     
     var id: NBIdentityMsg?
@@ -48,7 +48,7 @@ class NBStore: NSObject {
     
     // MARK: NBAltimeter handlers
     
-    private func handleAltimeterData(altitudeData: CMAltitudeData) {
+    fileprivate func handleAltimeterData(_ altitudeData: CMAltitudeData) {
         altitude = Float(altitudeData.relativeAltitude)
     }
 }

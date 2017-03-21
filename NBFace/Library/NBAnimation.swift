@@ -16,8 +16,8 @@ struct NBAnimation {
      Method used to attempt unwrapping a layer's presentation layer.
      - Parameter layer: The layer to get presentationLayer from
      */
-    static func getPresentationLayer(layer: CALayer) -> CALayer {
-        if let presentationLayer = layer.presentationLayer() as? CALayer {
+    static func getPresentationLayer(_ layer: CALayer) -> CALayer {
+        if let presentationLayer = layer.presentation() as CALayer! {
             return presentationLayer
         }
         
@@ -29,8 +29,8 @@ struct NBAnimation {
      Method used to attempt unwrapping a shape layer's presentation layer.
      - Parameter layer: The shape layer to get presentationLayer from
      */
-    static func getPresentationShapeLayer(layer: CAShapeLayer) -> CAShapeLayer {
-        if let presentationLayer = layer.presentationLayer() as? CAShapeLayer {
+    static func getPresentationShapeLayer(_ layer: CAShapeLayer) -> CAShapeLayer {
+        if let presentationLayer = layer.presentation() as CAShapeLayer! {
             return presentationLayer
         }
         
@@ -43,7 +43,7 @@ struct NBAnimation {
      layer's presentationLayer to get the current animated value.
      - Parameter layer: The layer to read from
      */
-    static func getPosition(layer: CALayer) -> CGPoint {
+    static func getPosition(_ layer: CALayer) -> CGPoint {
         let layer = self.getPresentationLayer(layer)
         return layer.position
     }
@@ -53,7 +53,7 @@ struct NBAnimation {
      layer's presentationLayer to get the current animated value.
      - Parameter layer: The layer to read from
      */
-    static func getTransform(layer: CALayer) -> CGAffineTransform {
+    static func getTransform(_ layer: CALayer) -> CGAffineTransform {
         let layer = self.getPresentationLayer(layer)
         return CATransform3DGetAffineTransform(layer.transform)
     }
@@ -63,7 +63,7 @@ struct NBAnimation {
      layer's presentationLayer to get the current animated value.
      - Parameter layer: The layer to read from
      */
-    static func getScale(layer: CALayer) -> CGPoint {
+    static func getScale(_ layer: CALayer) -> CGPoint {
         let transform = self.getTransform(layer)
         return CGPoint(x: transform.a, y: transform.d)
     }
@@ -72,7 +72,7 @@ struct NBAnimation {
       Utility method to get an keyTime based on an elapsed time in seconds normalized
       to a duration in seconds used for setting keyTimes array on CAKeyframeAnimation
      */
-    static func getKeyTimes(elapsedTimes:[CGFloat], _ duration:CGFloat) -> [CGFloat] {
+    static func getKeyTimes(_ elapsedTimes:[CGFloat], _ duration:CGFloat) -> [CGFloat] {
         return elapsedTimes.map({ $0/duration })
     }
     
@@ -80,17 +80,17 @@ struct NBAnimation {
      Utility method to get an array of CATransform3D scales wrapped in NSValues
      from an array of CGFloat scales
      */
-    static func getCAValues2DScale(scaleValues: [CGFloat]) -> [NSValue] {
+    static func getCAValues2DScale(_ scaleValues: [CGFloat]) -> [NSValue] {
         return scaleValues.map({
-            NSValue(CATransform3D: CATransform3DMakeScale($0, $0, 1.0))
+            NSValue(caTransform3D: CATransform3DMakeScale($0, $0, 1.0))
         })
     }
     
     /**
      Utility method to get an array of CGPoint positions wrapped in NSValues
      */
-    static func getCAValuesPosition(positionValues: [CGPoint]) -> [NSValue] {
-        return positionValues.map({ NSValue(CGPoint: $0) })
+    static func getCAValuesPosition(_ positionValues: [CGPoint]) -> [NSValue] {
+        return positionValues.map({ NSValue(cgPoint: $0) })
     }
     
     /**

@@ -11,11 +11,11 @@ import UIKit
 
 class NBIconButton: UIControl, NBManager {
     
-    private let ANIMATION_DURATION: NSTimeInterval = 0.15
-    private let ANNOTATION_OFFSET: CGFloat = 25.0
+    fileprivate let ANIMATION_DURATION: TimeInterval = 0.15
+    fileprivate let ANNOTATION_OFFSET: CGFloat = 25.0
     
-    private var _scale: CGFloat = 1.0
-    private var shadowOffset: CGFloat = 6.0
+    fileprivate var _scale: CGFloat = 1.0
+    fileprivate var shadowOffset: CGFloat = 6.0
     
     let annotationLabel = UILabel()
     let backView = NBView()
@@ -37,9 +37,9 @@ class NBIconButton: UIControl, NBManager {
             annotationLabel.frame.size.width = NB.FRAME.width
             annotationLabel.text = newValue
             if newValue == nil || newValue == "" {
-                annotationLabel.hidden = true
+                annotationLabel.isHidden = true
             } else {
-                annotationLabel.hidden = false
+                annotationLabel.isHidden = false
                 if let labelSize = annotationLabel.attributedText?.size() {
                     annotationLabel.frame.size.width = labelSize.width
                 } else {
@@ -50,7 +50,7 @@ class NBIconButton: UIControl, NBManager {
         }
     }
     
-    private var _fontSize: CGFloat = 21.0
+    fileprivate var _fontSize: CGFloat = 21.0
     var fontSize: CGFloat {
         get {
             return _fontSize
@@ -59,9 +59,9 @@ class NBIconButton: UIControl, NBManager {
             _fontSize = newValue
             annotationLabel.font = UIFont(name: NB.Font.MavenProBold.rawValue, size: _fontSize)
             if let labelSize = annotationLabel.attributedText?.size() {
-                annotationLabel.frame.size = CGSizeMake(labelSize.width, _fontSize + 5)
+                annotationLabel.frame.size = CGSize(width: labelSize.width, height: _fontSize + 5)
             } else {
-                annotationLabel.frame.size = CGSizeMake(frame.size.width, _fontSize + 5)
+                annotationLabel.frame.size = CGSize(width: frame.size.width, height: _fontSize + 5)
             }
             annotationLabel.frame.centerInRectMut(frame, xOffset: 0, yOffset: radius + ANNOTATION_OFFSET)
             setNeedsDisplay()
@@ -78,7 +78,7 @@ class NBIconButton: UIControl, NBManager {
         }
         set {
             _scale = newValue
-            transform = CGAffineTransformMakeScale(_scale, _scale)
+            transform = CGAffineTransform(scaleX: _scale, y: _scale)
         }
     }
     
@@ -87,7 +87,7 @@ class NBIconButton: UIControl, NBManager {
     init?(withIconID _icon: String, borderWidth: CGFloat = 6, shadowOffset: CGFloat = 6) {
         self.borderWidth = borderWidth
         self.shadowOffset = shadowOffset
-        super.init(frame: CGRectZero)
+        super.init(frame: CGRect.zero)
         guard let image = UIImage(named: _icon) else {
             return nil
         }
@@ -96,7 +96,7 @@ class NBIconButton: UIControl, NBManager {
     
     init(withUIImage image: UIImage, borderWidth: CGFloat = 6) {
         self.borderWidth = borderWidth
-        super.init(frame: CGRectZero)
+        super.init(frame: CGRect.zero)
         common(image)
     }
 
@@ -104,14 +104,14 @@ class NBIconButton: UIControl, NBManager {
         fatalError("init(coder:) has not been implemented")
     }
     
-    private func common(image: UIImage) {
+    fileprivate func common(_ image: UIImage) {
         frame.size = image.size
         container.frame = frame
         
         let cornerRadius: CGFloat = frame.size.width * 0.5
         
         icon = image
-        iconView.contentMode = .ScaleAspectFit
+        iconView.contentMode = .scaleAspectFit
         iconView.image = icon
         iconView.frame.size = icon.size
         iconView.layer.cornerRadius = cornerRadius
@@ -119,7 +119,7 @@ class NBIconButton: UIControl, NBManager {
         
         backView.frame.size = frame.size
         backView.layer.cornerRadius = cornerRadius
-        backView.backgroundColor = UIColor.whiteColor()
+        backView.backgroundColor = UIColor.white
         
         shadowView.frame.size = frame.size
         shadowView.frame.centerInRectMut(frame, xOffset: -shadowOffset, yOffset: shadowOffset)
@@ -127,15 +127,15 @@ class NBIconButton: UIControl, NBManager {
         shadowView.backgroundColor = NB.Colors.ButtonShadow
         
         annotationLabel.textColor = NB.Colors.OffWhite
-        annotationLabel.textAlignment = .Center
+        annotationLabel.textAlignment = .center
         annotationLabel.numberOfLines = 1
         fontSize = _fontSize
         
-        container.userInteractionEnabled = false
-        shadowView.userInteractionEnabled = false
-        iconView.userInteractionEnabled = false
-        backView.userInteractionEnabled = false
-        annotationLabel.userInteractionEnabled = false
+        container.isUserInteractionEnabled = false
+        shadowView.isUserInteractionEnabled = false
+        iconView.isUserInteractionEnabled = false
+        backView.isUserInteractionEnabled = false
+        annotationLabel.isUserInteractionEnabled = false
         
         container.addSubview(shadowView)
         container.addSubview(backView)
@@ -143,36 +143,36 @@ class NBIconButton: UIControl, NBManager {
         addSubview(container)
         addSubview(annotationLabel)
         
-        addTarget(self, action: #selector(NBIconButton.handleTouchDown), forControlEvents: .TouchDown)
-        addTarget(self, action: #selector(NBIconButton.handleTouchDragExit), forControlEvents: .TouchDragExit)
-        addTarget(self, action: #selector(NBIconButton.handleTouchUpInside), forControlEvents: .TouchUpInside)
-        addTarget(self, action: #selector(NBIconButton.handleTouchUpOutside), forControlEvents: .TouchUpOutside)
+        addTarget(self, action: #selector(NBIconButton.handleTouchDown), for: .touchDown)
+        addTarget(self, action: #selector(NBIconButton.handleTouchDragExit), for: .touchDragExit)
+        addTarget(self, action: #selector(NBIconButton.handleTouchUpInside), for: .touchUpInside)
+        addTarget(self, action: #selector(NBIconButton.handleTouchUpOutside), for: .touchUpOutside)
     }
     
     // MARK: - Public API
     
     func transitionToActive() {
         let borderWidth = self.borderWidth
-        UIView.animateWithDuration(
-            ANIMATION_DURATION,
+        UIView.animate(
+            withDuration: ANIMATION_DURATION,
             delay: 0,
-            options: [.CurveEaseInOut, .AllowUserInteraction],
+            options: .allowUserInteraction,
             animations: { [weak self] in
-                self?.container.transform = CGAffineTransformMakeScale(0.95, 0.95)
-                self?.iconView.transform = CGAffineTransformMakeScale(0.85, 0.85)
-                self?.shadowView.transform = CGAffineTransformMakeTranslation(borderWidth * 0.5, borderWidth * -0.5)
+                self?.container.transform = CGAffineTransform(scaleX: 0.95, y: 0.95)
+                self?.iconView.transform = CGAffineTransform(scaleX: 0.85, y: 0.85)
+                self?.shadowView.transform = CGAffineTransform(translationX: borderWidth * 0.5, y: borderWidth * -0.5)
             }, completion: nil)
     }
     
     func transitionToDefault() {
-        UIView.animateWithDuration(
-            ANIMATION_DURATION,
+        UIView.animate(
+            withDuration: ANIMATION_DURATION,
             delay: 0,
-            options: [.CurveEaseInOut, .AllowUserInteraction],
+            options: .allowUserInteraction,
             animations: { [weak self] in
-                self?.container.transform = CGAffineTransformMakeScale(1, 1)
-                self?.iconView.transform = CGAffineTransformMakeScale(1, 1)
-                self?.shadowView.transform = CGAffineTransformMakeTranslation(0, 0)
+                self?.container.transform = CGAffineTransform(scaleX: 1, y: 1)
+                self?.iconView.transform = CGAffineTransform(scaleX: 1, y: 1)
+                self?.shadowView.transform = CGAffineTransform(translationX: 0, y: 0)
             }, completion: nil)
     }
     

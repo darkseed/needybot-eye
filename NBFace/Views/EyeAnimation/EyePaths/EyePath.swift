@@ -13,13 +13,13 @@ class EyePath: UIBezierPath {
     override init() {
         super.init()
         
-        moveToPoint(CGPoint(x: 1.26, y: 512.43))
-        addCurveToPoint(CGPoint(x: 477.01, y: 998.52), controlPoint1: CGPoint(x: 24.83, y: 802.36), controlPoint2: CGPoint(x: 218.46, y: 975.93))
-        addCurveToPoint(CGPoint(x: 999.93, y: 474.7), controlPoint1: CGPoint(x: 735.57, y: 1021.1), controlPoint2: CGPoint(x: 995.2, y: 783.09))
-        addCurveToPoint(CGPoint(x: 539.78, y: 0.83), controlPoint1: CGPoint(x: 1004.16, y: 198.7), controlPoint2: CGPoint(x: 821.47, y: 18.02))
-        addCurveToPoint(CGPoint(x: 1.26, y: 512.43), controlPoint1: CGPoint(x: 258.09, y: -16.37), controlPoint2: CGPoint(x: -21.11, y: 237.24))
-        closePath()
-        moveToPoint(CGPoint(x: 1.26, y: 512.43))
+        move(to: CGPoint(x: 1.26, y: 512.43))
+        addCurve(to: CGPoint(x: 477.01, y: 998.52), controlPoint1: CGPoint(x: 24.83, y: 802.36), controlPoint2: CGPoint(x: 218.46, y: 975.93))
+        addCurve(to: CGPoint(x: 999.93, y: 474.7), controlPoint1: CGPoint(x: 735.57, y: 1021.1), controlPoint2: CGPoint(x: 995.2, y: 783.09))
+        addCurve(to: CGPoint(x: 539.78, y: 0.83), controlPoint1: CGPoint(x: 1004.16, y: 198.7), controlPoint2: CGPoint(x: 821.47, y: 18.02))
+        addCurve(to: CGPoint(x: 1.26, y: 512.43), controlPoint1: CGPoint(x: 258.09, y: -16.37), controlPoint2: CGPoint(x: -21.11, y: 237.24))
+        close()
+        move(to: CGPoint(x: 1.26, y: 512.43))
         usesEvenOddFillRule = true
     }
 

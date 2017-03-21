@@ -11,9 +11,9 @@ import UIKit
 
 struct NBBase64ImageMsg: ROSMessage {
     
-    private var _encoded: String
+    fileprivate var _encoded: String
     
-    mutating func encoded(image: UIImage? = nil) -> String {
+    mutating func encoded(_ image: UIImage? = nil) -> String {
         guard let image = image else {
             return _encoded
         }
@@ -21,7 +21,7 @@ struct NBBase64ImageMsg: ROSMessage {
             NB.log("Could not create b64 version of image: \(image.description)")
             return _encoded
         }
-        _encoded = imageData.base64EncodedStringWithOptions(.EncodingEndLineWithCarriageReturn)
+        _encoded = imageData.base64EncodedString(options: .endLineWithCarriageReturn)
         return _encoded
     }
     
@@ -33,7 +33,7 @@ struct NBBase64ImageMsg: ROSMessage {
     
     func asMsg() -> [String : AnyObject] {
         return [
-            "encoded": _encoded
+            "encoded": _encoded as AnyObject
         ]
     }
 }

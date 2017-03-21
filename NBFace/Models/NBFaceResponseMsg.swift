@@ -14,8 +14,8 @@ struct NBFaceResponseMsg: ROSMessage {
         case success, failure, timeout
     }
     
-    private var _status: String
-    private var _step: String
+    fileprivate var _status: String
+    fileprivate var _step: String
     
     static func Failure() -> NBFaceResponseMsg {
         var res = NBFaceResponseMsg.Default() as! NBFaceResponseMsg
@@ -35,7 +35,7 @@ struct NBFaceResponseMsg: ROSMessage {
         return res
     }
 
-    mutating func status(status: NBFaceResponseMsg.StatusTypes? = nil) -> String {
+    mutating func status(_ status: NBFaceResponseMsg.StatusTypes? = nil) -> String {
         guard let status = status else {
             return _status
         }
@@ -43,7 +43,7 @@ struct NBFaceResponseMsg: ROSMessage {
         return _status
     }
     
-    mutating func step(step: String? = nil) -> String {
+    mutating func step(_ step: String? = nil) -> String {
         guard let step = step else {
             return _step
         }
@@ -59,8 +59,8 @@ struct NBFaceResponseMsg: ROSMessage {
     
     func asMsg() -> [String : AnyObject] {
         return [
-            "status": _status,
-            "step": _step,
+            "status": _status as AnyObject,
+            "step": _step as AnyObject,
         ]
     }
 }

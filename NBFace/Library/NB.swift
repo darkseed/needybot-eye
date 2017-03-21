@@ -21,14 +21,14 @@ struct NB {
         The frame to be used on any fullscreen view. Uses the `y_offset` property
         in our settings bundle.
     */
-    static var FRAME: CGRect = CGRectMake(
-        0,
-        CGFloat(NSUserDefaults.standardUserDefaults().floatForKey("y_offset")),
-        UIScreen.mainScreen().bounds.width,
-        UIScreen.mainScreen().bounds.height
+    static var FRAME: CGRect = CGRect(
+        x: 0,
+        y: CGFloat(UserDefaults.standard.float(forKey: "y_offset")),
+        width: UIScreen.main.bounds.width,
+        height: UIScreen.main.bounds.height
     )
     
-    static let ANIMATION_DURATION: NSTimeInterval = 0.25
+    static let ANIMATION_DURATION: TimeInterval = 0.25
 //    static let ANIMATION_DURATION: NSTimeInterval = 0.5
     
     enum Font: String {
@@ -45,7 +45,7 @@ struct NB {
         case LostAlert
         case MainMenu
         
-        static func fromString (inputType: String) -> InputType? {
+        static func fromString (_ inputType: String) -> InputType? {
             switch inputType {
             case "confirm":
                 return InputType.Confirm
@@ -65,7 +65,7 @@ struct NB {
         case Idle
         case Sad
         
-        static func fromString (inputType: String) -> EyeEmotion? {
+        static func fromString (_ inputType: String) -> EyeEmotion? {
             switch inputType {
             case "happy":
                 return EyeEmotion.Happy
@@ -92,7 +92,7 @@ struct NB {
         // => [NBRootViewController]: Ok
         ```
     */
-    static func log(message: String, caller: Any? = nil) {
+    static func log(_ message: String, caller: Any? = nil) {
         var msg = ""
         if let caller = caller {
             msg += "[\(caller.self)]: "
@@ -113,7 +113,7 @@ struct NB {
         let result = NB.mergeDicts(["source": true], ["foo": "bar"])
         ```
     */
-    static func mergeDicts<K, V>(left: Dictionary<K, V>, _ right: Dictionary<K, V>) -> Dictionary<K, V> {
+    static func mergeDicts<K, V>(_ left: Dictionary<K, V>, _ right: Dictionary<K, V>) -> Dictionary<K, V> {
         var map = Dictionary<K, V>()
         for (k, v) in left {
             map[k] = v
@@ -136,7 +136,7 @@ struct NB {
     /**
      Method that returns a random Double given a min and max value
     **/
-    static func rand(min: Double, max: Double) -> Double {
+    static func rand(_ min: Double, max: Double) -> Double {
         return min + (Double(arc4random_uniform(1001))/1000 * (max - min))
     }
     
@@ -156,8 +156,8 @@ struct NB {
         let result = myArray[i]
         ```
     */
-    static func randomInRange(range: Range<UInt32>) -> UInt32 {
-        return range.startIndex + arc4random_uniform(range.endIndex - range.startIndex)
+    static func randomInRange(_ range: Range<UInt32>) -> UInt32 {
+        return range.lowerBound + arc4random_uniform(range.upperBound - range.lowerBound)
     }
     
     /**
@@ -188,7 +188,7 @@ struct NB {
         static let Gold = UIColor(250, 180, 70, 1.0)
         static let Blue = UIColor(91, 132, 246, 1.0)
         
-        static func fromWord (colorName: String) -> UIColor {
+        static func fromWord (_ colorName: String) -> UIColor {
             switch colorName {
                 case "orange":
                     return Colors.Orange
@@ -203,12 +203,12 @@ struct NB {
     }
     
     enum ResizingBehavior {
-        case AspectFit // The content is proportionally resized to fit into the target rectangle.
-        case AspectFill // The content is proportionally resized to completely fill the target rectangle.
-        case Stretch // The content is stretched to match the entire target rectangle.
-        case Center // The content is centered in the target rectangle, but it is NOT resized.
+        case aspectFit // The content is proportionally resized to fit into the target rectangle.
+        case aspectFill // The content is proportionally resized to completely fill the target rectangle.
+        case stretch // The content is stretched to match the entire target rectangle.
+        case center // The content is centered in the target rectangle, but it is NOT resized.
         
-        func apply(rect rect: CGRect, target: CGRect) -> CGRect {
+        func apply(rect: CGRect, target: CGRect) -> CGRect {
             if rect == target || target == CGRect.zero {
                 return rect
             }
@@ -218,15 +218,15 @@ struct NB {
             scales.height = abs(target.height / rect.height)
             
             switch self {
-            case .AspectFit:
+            case .aspectFit:
                 scales.width = min(scales.width, scales.height)
                 scales.height = scales.width
-            case .AspectFill:
+            case .aspectFill:
                 scales.width = max(scales.width, scales.height)
                 scales.height = scales.width
-            case .Stretch:
+            case .stretch:
                 break
-            case .Center:
+            case .center:
                 scales.width = 1
                 scales.height = 1
             }

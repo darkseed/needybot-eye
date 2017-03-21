@@ -12,9 +12,9 @@ import UIKit
 extension UIImage {
     
     // from http://stackoverflow.com/questions/32041420/cropping-image-with-swift-and-put-it-on-center-position
-    static func cropToBounds(image: UIImage, width: Double, height: Double) -> UIImage {
+    static func cropToBounds(_ image: UIImage, width: Double, height: Double) -> UIImage {
         
-        let contextImage: UIImage = UIImage(CGImage: image.CGImage!)
+        let contextImage: UIImage = UIImage(cgImage: image.cgImage!)
         
         let contextSize: CGSize = contextImage.size
         
@@ -36,24 +36,24 @@ extension UIImage {
             cgheight = contextSize.width
         }
         
-        let rect: CGRect = CGRectMake(posX, posY, cgwidth, cgheight)
+        let rect: CGRect = CGRect(x: posX, y: posY, width: cgwidth, height: cgheight)
         
         // Create bitmap image from context using the rect
-        let imageRef: CGImageRef = CGImageCreateWithImageInRect(contextImage.CGImage, rect)!
+        let imageRef: CGImage = contextImage.cgImage!.cropping(to: rect)!
         
         // Create a new image based on the imageRef and rotate back to the original orientation
-        let image: UIImage = UIImage(CGImage: imageRef, scale: image.scale, orientation: image.imageOrientation)
+        let image: UIImage = UIImage(cgImage: imageRef, scale: image.scale, orientation: image.imageOrientation)
         
         return image
     }
     
     // https://gist.github.com/justinlevi/ee037a4bb63598f6e56f
     
-    func RBSquareImageTo(size: CGSize, dx: CGFloat = 0, dy: CGFloat = 0) -> UIImage? {
+    func RBSquareImageTo(_ size: CGSize, dx: CGFloat = 0, dy: CGFloat = 0) -> UIImage? {
         return self.RBSquareImage(dx, dy: dy)?.RBResizeImage(size)
     }
     
-    func RBSquareImage(dx: CGFloat = 0, dy: CGFloat = 0) -> UIImage? {
+    func RBSquareImage(_ dx: CGFloat = 0, dy: CGFloat = 0) -> UIImage? {
         let originalWidth  = self.size.width
         let originalHeight = self.size.height
         
@@ -67,13 +67,13 @@ extension UIImage {
         let posX = ((originalWidth  - edge) / 2.0) + dx
         let posY = ((originalHeight - edge) / 2.0) + dy
         
-        let cropSquare = CGRectMake(posX, posY, edge, edge)
+        let cropSquare = CGRect(x: posX, y: posY, width: edge, height: edge)
         
-        let imageRef = CGImageCreateWithImageInRect(self.CGImage, cropSquare);
-        return UIImage(CGImage: imageRef!, scale: UIScreen.mainScreen().scale, orientation: self.imageOrientation)
+        let imageRef = self.cgImage?.cropping(to: cropSquare);
+        return UIImage(cgImage: imageRef!, scale: UIScreen.main.scale, orientation: self.imageOrientation)
     }
     
-    func RBResizeImage(targetSize: CGSize, dx: CGFloat = 0, dy: CGFloat = 0) -> UIImage {
+    func RBResizeImage(_ targetSize: CGSize, dx: CGFloat = 0, dy: CGFloat = 0) -> UIImage {
         let size = self.size
         
         let widthRatio  = targetSize.width  / self.size.width
@@ -82,21 +82,21 @@ extension UIImage {
         // Figure out what our orientation is, and use that to form the rectangle
         var newSize: CGSize
         if(widthRatio > heightRatio) {
-            newSize = CGSizeMake(size.width * heightRatio, size.height * heightRatio)
+            newSize = CGSize(width: size.width * heightRatio, height: size.height * heightRatio)
         } else {
-            newSize = CGSizeMake(size.width * widthRatio,  size.height * widthRatio)
+            newSize = CGSize(width: size.width * widthRatio,  height: size.height * widthRatio)
         }
         
         // This is the rect that we've calculated out and this is what is actually used below
-        let rect = CGRectMake(dx, dy, newSize.width, newSize.height)
+        let rect = CGRect(x: dx, y: dy, width: newSize.width, height: newSize.height)
         
         // Actually do the resizing to the rect using the ImageContext stuff
-        UIGraphicsBeginImageContextWithOptions(newSize, false, UIScreen.mainScreen().scale)
-        self.drawInRect(rect)
+        UIGraphicsBeginImageContextWithOptions(newSize, false, UIScreen.main.scale)
+        self.draw(in: rect)
         let newImage = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
         
-        return newImage
+        return newImage!
     }
     
 }

@@ -9,6 +9,30 @@
 import AVFoundation
 import Foundation
 import UIKit
+// FIXME: comparison operators with optionals were removed from the Swift Standard Libary.
+// Consider refactoring the code to use the non-optional operators.
+fileprivate func < <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+  switch (lhs, rhs) {
+  case let (l?, r?):
+    return l < r
+  case (nil, _?):
+    return true
+  default:
+    return false
+  }
+}
+
+// FIXME: comparison operators with optionals were removed from the Swift Standard Libary.
+// Consider refactoring the code to use the non-optional operators.
+fileprivate func > <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+  switch (lhs, rhs) {
+  case let (l?, r?):
+    return l > r
+  default:
+    return rhs < lhs
+  }
+}
+
 
 class NBIdentityManager: NSObject, AVCaptureVideoDataOutputSampleBufferDelegate {
     
@@ -21,23 +45,23 @@ class NBIdentityManager: NSObject, AVCaptureVideoDataOutputSampleBufferDelegate 
         return _defaultManager!
     }
     
-    private enum Stack {
-        case Detection, Preview
+    fileprivate enum Stack {
+        case detection, preview
     }
     
-    private let videoDataOutputQueue = dispatch_queue_create("VideoDataOutputQueue", DISPATCH_QUEUE_SERIAL)
+    fileprivate let videoDataOutputQueue = DispatchQueue(label: "VideoDataOutputQueue", attributes: [])
     
-    private var detector: CIDetector?
-    private var detectionHandlers = [NBHandler]()
-    private var device: AVCaptureDevice?
-    private var deviceInput: AVCaptureDeviceInput?
-    private var previewHandlers = [NBHandler]()
-    private var session: AVCaptureSession?
-    private var videoDataOutput: AVCaptureVideoDataOutput?
+    fileprivate var detector: CIDetector?
+    fileprivate var detectionHandlers = [NBHandler]()
+    fileprivate var device: AVCaptureDevice?
+    fileprivate var deviceInput: AVCaptureDeviceInput?
+    fileprivate var previewHandlers = [NBHandler]()
+    fileprivate var session: AVCaptureSession?
+    fileprivate var videoDataOutput: AVCaptureVideoDataOutput?
     
     override init() {
         super.init()
-        if UIImagePickerController.isSourceTypeAvailable(.Camera) {
+        if UIImagePickerController.isSourceTypeAvailable(.camera) {
             setupAVCapture()
             detector = CIDetector(
                 ofType: CIDetectorTypeFace,
@@ -49,23 +73,23 @@ class NBIdentityManager: NSObject, AVCaptureVideoDataOutputSampleBufferDelegate 
     
     // MARK: Private methods
     
-    private func processFeatures(features: [CIFeature], image: CGImage, videoRect: CGRect) {
+    fileprivate func processFeatures(_ features: [CIFeature], image: CGImage, videoRect: CGRect) {
         let angle = CGFloat(-0.5 * M_PI)
-        let uiimage = UIImage(CGImage: image)
-        UIGraphicsBeginImageContext(CGSizeMake(uiimage.size.height, uiimage.size.width))
+        let uiimage = UIImage(cgImage: image)
+        UIGraphicsBeginImageContext(CGSize(width: uiimage.size.height, height: uiimage.size.width))
         let ctx = UIGraphicsGetCurrentContext()
-        CGContextScaleCTM(ctx, -1, 1)
-        CGContextTranslateCTM(ctx, -uiimage.size.height, uiimage.size.width)
-        CGContextRotateCTM(ctx, angle)
-        uiimage.drawAtPoint(CGPointMake(0, 0))
+        ctx?.scaleBy(x: -1, y: 1)
+        ctx?.translateBy(x: -uiimage.size.height, y: uiimage.size.width)
+        ctx?.rotate(by: angle)
+        uiimage.draw(at: CGPoint(x: 0, y: 0))
         let out = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
         
-        runStack(Stack.Preview, payload: [
+        runStack(Stack.preview, payload: [
             "image": out
         ])
         
-        let outRect = CGRectMake(0, 0, out.size.width, out.size.height)
+        let outRect = CGRect(x: 0, y: 0, width: (out?.size.width)!, height: (out?.size.height)!)
         
         if features.count > 0 {
             
@@ -83,17 +107,17 @@ class NBIdentityManager: NSObject, AVCaptureVideoDataOutputSampleBufferDelegate 
             
             // Apply normalization tranformation
             if let rect = focusedFeature?.bounds {
-                var transform = CGAffineTransformMakeTranslation(0, videoRect.width)
-                transform = CGAffineTransformScale(transform, -1, -1)
-                transform = CGAffineTransformRotate(transform, -angle)
-                let newRect = CGRectApplyAffineTransform(rect, transform)
+                var transform = CGAffineTransform(translationX: 0, y: videoRect.width)
+                transform = transform.scaledBy(x: -1, y: -1)
+                transform = transform.rotated(by: -angle)
+                let newRect = rect.applying(transform)
                 
                 // Crop image
-                let clone = CGImageCreateCopy(out.CGImage)
-                let croppedImage = CGImageCreateWithImageInRect(clone, newRect)
+                let clone = out?.cgImage?.copy()
+                let croppedImage = clone?.cropping(to: newRect)
                 
                 if croppedImage != nil {
-                    let img = UIImage(CGImage: croppedImage!)
+                    let img = UIImage(cgImage: croppedImage!)
                     // Run detection stack
                     let payload: [String: Any] = [
                         "feature": newRect,
@@ -101,19 +125,19 @@ class NBIdentityManager: NSObject, AVCaptureVideoDataOutputSampleBufferDelegate 
                         "croppedImage": img,
                         "image": out,
                     ]
-                    runStack(Stack.Detection, payload: payload)
+                    runStack(Stack.detection, payload: payload)
                 }
             }
         }
     }
     
-    private func runStack(stack: Stack, payload: [String: Any]) {
+    fileprivate func runStack(_ stack: Stack, payload: [String: Any]) {
         var handlers: [NBHandler]
         switch stack {
-        case .Detection:
+        case .detection:
             handlers = detectionHandlers
             
-        case .Preview:
+        case .preview:
             handlers = previewHandlers
         }
         
@@ -122,7 +146,7 @@ class NBIdentityManager: NSObject, AVCaptureVideoDataOutputSampleBufferDelegate 
         }
     }
     
-    private func setupAVCapture() {
+    fileprivate func setupAVCapture() {
         var err: NSError? = nil
         
         session = AVCaptureSession()
@@ -133,11 +157,11 @@ class NBIdentityManager: NSObject, AVCaptureVideoDataOutputSampleBufferDelegate 
         session.sessionPreset = AVCaptureSessionPresetMedium
         
         let devices = AVCaptureDevice.devices()
-        for d in devices {
+        for d in devices! {
             guard let d = d as? AVCaptureDevice else {
                 continue
             }
-            if d.hasMediaType(AVMediaTypeVideo) && d.position == .Front {
+            if d.hasMediaType(AVMediaTypeVideo) && d.position == .front {
                 device = d
             }
         }
@@ -146,12 +170,12 @@ class NBIdentityManager: NSObject, AVCaptureVideoDataOutputSampleBufferDelegate 
             return
         }
         
-        if device.focusPointOfInterestSupported {
-            device.focusPointOfInterest = CGPointMake(
-                UIScreen.mainScreen().bounds.size.width * 0.5,
-                UIScreen.mainScreen().bounds.size.height * 0.5
+        if device.isFocusPointOfInterestSupported {
+            device.focusPointOfInterest = CGPoint(
+                x: UIScreen.main.bounds.size.width * 0.5,
+                y: UIScreen.main.bounds.size.height * 0.5
             )
-            device.focusMode = AVCaptureFocusMode.ContinuousAutoFocus
+            device.focusMode = AVCaptureFocusMode.continuousAutoFocus
         }
         
         do {
@@ -179,9 +203,9 @@ class NBIdentityManager: NSObject, AVCaptureVideoDataOutputSampleBufferDelegate 
         }
         
         guard let rgbOutputSettings = NSDictionary(
-                object: NSNumber(unsignedInt: kCMPixelFormat_32BGRA),
-                forKey: kCVPixelBufferPixelFormatTypeKey as String
-            ) as? [NSObject: AnyObject] else {
+                object: NSNumber(value: kCMPixelFormat_32BGRA as UInt32),
+                forKey: kCVPixelBufferPixelFormatTypeKey as String as String as NSCopying
+            ) as? [AnyHashable: Any] else {
                 return
         }
         videoDataOutput.videoSettings = rgbOutputSettings
@@ -193,32 +217,32 @@ class NBIdentityManager: NSObject, AVCaptureVideoDataOutputSampleBufferDelegate 
             session.addOutput(videoDataOutput)
         }
         
-        videoDataOutput.connectionWithMediaType(AVMediaTypeVideo).enabled = true
+        videoDataOutput.connection(withMediaType: AVMediaTypeVideo).isEnabled = true
         
         start()
     }
     
     // MARK: Public API
     
-    func addDetectionHandler(handler: NBHandler) {
+    func addDetectionHandler(_ handler: NBHandler) {
         detectionHandlers.append(handler)
     }
     
-    func addPreviewHandler(handler: NBHandler) {
+    func addPreviewHandler(_ handler: NBHandler) {
         previewHandlers.append(handler)
     }
     
-    func removeDetectionHandler(handler: NBHandler) -> Bool {
-        if let index = detectionHandlers.indexOf(handler) {
-            detectionHandlers.removeAtIndex(index)
+    func removeDetectionHandler(_ handler: NBHandler) -> Bool {
+        if let index = detectionHandlers.index(of: handler) {
+            detectionHandlers.remove(at: index)
             return true
         }
         return false
     }
     
-    func removePreviewHandler(handler: NBHandler) -> Bool {
-        if let index = previewHandlers.indexOf(handler) {
-            previewHandlers.removeAtIndex(index)
+    func removePreviewHandler(_ handler: NBHandler) -> Bool {
+        if let index = previewHandlers.index(of: handler) {
+            previewHandlers.remove(at: index)
             return true
         }
         return false
@@ -240,33 +264,33 @@ class NBIdentityManager: NSObject, AVCaptureVideoDataOutputSampleBufferDelegate 
     
     // MARK: AVCaptureVideoDataOutputSampleBufferDelegate implementation
     
-    func captureOutput(captureOutput: AVCaptureOutput!, didOutputSampleBuffer sampleBuffer: CMSampleBuffer!, fromConnection connection: AVCaptureConnection!) {
+    func captureOutput(_ captureOutput: AVCaptureOutput!, didOutputSampleBuffer sampleBuffer: CMSampleBuffer!, from connection: AVCaptureConnection!) {
         guard let detector = detector,
             let imageBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) else {
             return
         }
         
-        let pixelBuffer = imageBuffer as CVPixelBufferRef
-        let image = CIImage(CVPixelBuffer: pixelBuffer)
+        let pixelBuffer = imageBuffer as CVPixelBuffer
+        let image = CIImage(cvPixelBuffer: pixelBuffer)
         let ctx = CIContext(options: nil)
-        let ctxRect = CGRectMake(
-            0, 0,
-            CGFloat(CVPixelBufferGetWidth(pixelBuffer)),
-            CGFloat(CVPixelBufferGetHeight(pixelBuffer))
+        let ctxRect = CGRect(
+            x: 0, y: 0,
+            width: CGFloat(CVPixelBufferGetWidth(pixelBuffer)),
+            height: CGFloat(CVPixelBufferGetHeight(pixelBuffer))
         )
-        let ctxImage = ctx.createCGImage(image, fromRect: ctxRect)
+        let ctxImage = ctx.createCGImage(image, from: ctxRect)
         let imageOptions = [
-            CIDetectorImageOrientation: NSNumber(integer: 8) // upside-down constant
+            CIDetectorImageOrientation: NSNumber(value: 8 as Int) // upside-down constant
         ]
-        let features = detector.featuresInImage(image, options: imageOptions)
+        let features = detector.features(in: image, options: imageOptions)
         guard let desc = CMSampleBufferGetFormatDescription(sampleBuffer) else {
             return
         }
         
         let cleanAperture: CGRect = CMVideoFormatDescriptionGetCleanAperture(desc, false)
         
-        dispatch_async(dispatch_get_main_queue()) { [weak self] in
-            self?.processFeatures(features , image: ctxImage, videoRect: cleanAperture)
+        DispatchQueue.main.async { [weak self] in
+            self?.processFeatures(features , image: ctxImage!, videoRect: cleanAperture)
         }
     }
 }

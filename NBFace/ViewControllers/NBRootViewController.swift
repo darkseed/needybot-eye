@@ -14,14 +14,14 @@ import Async
 
 class NBRootViewController: UIViewController, UIGestureRecognizerDelegate {
     
-    private let eyeController = NBEyeViewController()
-    private let inputController = NBInputViewController()
-    private let blinkView = NBBlinkView()
+    fileprivate let eyeController = NBEyeViewController()
+    fileprivate let inputController = NBInputViewController()
+    fileprivate let blinkView = NBBlinkView()
     
-    private var currentInputType: NB.InputType?
-    private var currentEmotion: NB.EyeEmotion?
+    fileprivate var currentInputType: NB.InputType?
+    fileprivate var currentEmotion: NB.EyeEmotion?
     
-    private var debug = true
+    fileprivate var debug = true
     var tapGestureRecognizer: UITapGestureRecognizer!
     
     override func viewDidLoad() {
@@ -40,8 +40,8 @@ class NBRootViewController: UIViewController, UIGestureRecognizerDelegate {
             view.addSubview(debugView)
             
             setInputType(.Confirm, withData: [
-                "title": "Confirmation Screen Title Here",
-                "subtitle": "Subtitle Here"
+                "title": "Confirmation Screen Title Here" as AnyObject,
+                "subtitle": "Subtitle Here" as AnyObject
             ])
             
             tapGestureRecognizer = UITapGestureRecognizer(
@@ -63,7 +63,7 @@ class NBRootViewController: UIViewController, UIGestureRecognizerDelegate {
         view.addSubview(blinkView)
     }
     
-    func setInputType(inputType: NB.InputType, withData data: [String: AnyObject]? = nil) {
+    func setInputType(_ inputType: NB.InputType, withData data: [String: AnyObject]? = nil) {
         // NB.log("setInput inputType: " + inputType.rawValue)
         
         // make sure type is different
@@ -83,7 +83,7 @@ class NBRootViewController: UIViewController, UIGestureRecognizerDelegate {
         )
     }
     
-    func setEyeEmotion(eyeEmotion: NB.EyeEmotion = .Idle) {
+    func setEyeEmotion(_ eyeEmotion: NB.EyeEmotion = .Idle) {
         // NB.log("setEyeEmotion eyeEmotion: " + eyeEmotion.rawValue)
         currentEmotion = eyeEmotion
         

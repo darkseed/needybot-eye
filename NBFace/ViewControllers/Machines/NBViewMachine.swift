@@ -16,7 +16,7 @@ class NBViewMachine: NBStateMachine {
     var root: NBRootViewController?
     
     var connectionURL: String? {
-        return NSUserDefaults.standardUserDefaults().valueForKeyPath("rosbridge_url") as? String
+        return UserDefaults.standard.value(forKeyPath: "rosbridge_url") as? String
     }
     let instruct = ROSTopic(topic: "/needybot/msg/instruct", type: "std_msgs/String", queueLength: 10, throttleRate: 750)
     let responsePub = ROSTopic(topic: "/needybot/msg/response", type: "needybot/FaceResponse", queueLength: 20)

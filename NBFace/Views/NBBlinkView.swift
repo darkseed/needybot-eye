@@ -12,7 +12,7 @@ import UIKit
 
 class NBBlinkView: NBView {
     
-    let color = NB.Colors.Background.CGColor
+    let color = NB.Colors.Background.cgColor
 //    let color = UIColor(255, 0, 0, 0.15).CGColor
     let toplid = CAShapeLayer()
     let botlid = CAShapeLayer()
@@ -25,13 +25,13 @@ class NBBlinkView: NBView {
         let cp1 = CGPoint(x: NB.FRAME.width * 0.375, y: c.y + c.x + yoff)
         let cp2 = CGPoint(x: NB.FRAME.width * 0.625, y: c.y + c.x + yoff)
         
-        p.moveToPoint(CGPoint(x: 0, y: c.y + yoff))
-        p.addLineToPoint(CGPoint(x: 10, y: c.y + yoff))
-        p.addCurveToPoint(CGPoint(x: NB.FRAME.width - 10, y: c.y + yoff), controlPoint1: cp1, controlPoint2: cp2)
-        p.addLineToPoint(CGPoint(x: NB.FRAME.width, y: c.y + yoff))
-        p.addLineToPoint(CGPoint(x: NB.FRAME.width, y: c.y * 2))
-        p.addLineToPoint(CGPoint(x: NB.FRAME.origin.x, y: c.y * 2))
-        p.closePath()
+        p.move(to: CGPoint(x: 0, y: c.y + yoff))
+        p.addLine(to: CGPoint(x: 10, y: c.y + yoff))
+        p.addCurve(to: CGPoint(x: NB.FRAME.width - 10, y: c.y + yoff), controlPoint1: cp1, controlPoint2: cp2)
+        p.addLine(to: CGPoint(x: NB.FRAME.width, y: c.y + yoff))
+        p.addLine(to: CGPoint(x: NB.FRAME.width, y: c.y * 2))
+        p.addLine(to: CGPoint(x: NB.FRAME.origin.x, y: c.y * 2))
+        p.close()
         
         return p
     }()
@@ -42,13 +42,13 @@ class NBBlinkView: NBView {
         let cp1 = CGPoint(x: NB.FRAME.width * 0.375, y: c.y)
         let cp2 = CGPoint(x: NB.FRAME.width * 0.625, y: c.y)
         
-        p.moveToPoint(CGPoint(x: 0, y: c.y))
-        p.addLineToPoint(CGPoint(x: 10, y: c.y))
-        p.addCurveToPoint(CGPoint(x: NB.FRAME.width - 10, y: c.y), controlPoint1: cp1, controlPoint2: cp2)
-        p.addLineToPoint(CGPoint(x: NB.FRAME.width, y: c.y))
-        p.addLineToPoint(CGPoint(x: NB.FRAME.width, y: c.y * 2))
-        p.addLineToPoint(CGPoint(x: NB.FRAME.origin.x, y: c.y * 2))
-        p.closePath()
+        p.move(to: CGPoint(x: 0, y: c.y))
+        p.addLine(to: CGPoint(x: 10, y: c.y))
+        p.addCurve(to: CGPoint(x: NB.FRAME.width - 10, y: c.y), controlPoint1: cp1, controlPoint2: cp2)
+        p.addLine(to: CGPoint(x: NB.FRAME.width, y: c.y))
+        p.addLine(to: CGPoint(x: NB.FRAME.width, y: c.y * 2))
+        p.addLine(to: CGPoint(x: NB.FRAME.origin.x, y: c.y * 2))
+        p.close()
         
         return p
     }()
@@ -60,13 +60,13 @@ class NBBlinkView: NBView {
         let cp1 = CGPoint(x: NB.FRAME.width * 0.375, y: c.y - c.x - yoff)
         let cp2 = CGPoint(x: NB.FRAME.width * 0.625, y: c.y - c.x - yoff)
         
-        p.moveToPoint(CGPoint(x: 0, y: c.y - yoff))
-        p.addLineToPoint(CGPoint(x: 10, y: c.y - yoff))
-        p.addCurveToPoint(CGPoint(x: NB.FRAME.width - 10, y: c.y - yoff), controlPoint1: cp1, controlPoint2: cp2)
-        p.addLineToPoint(CGPoint(x: NB.FRAME.width, y: c.y - yoff))
-        p.addLineToPoint(CGPoint(x: NB.FRAME.width, y: NB.FRAME.origin.y))
-        p.addLineToPoint(CGPoint(x: NB.FRAME.origin.x, y: NB.FRAME.origin.y))
-        p.closePath()
+        p.move(to: CGPoint(x: 0, y: c.y - yoff))
+        p.addLine(to: CGPoint(x: 10, y: c.y - yoff))
+        p.addCurve(to: CGPoint(x: NB.FRAME.width - 10, y: c.y - yoff), controlPoint1: cp1, controlPoint2: cp2)
+        p.addLine(to: CGPoint(x: NB.FRAME.width, y: c.y - yoff))
+        p.addLine(to: CGPoint(x: NB.FRAME.width, y: NB.FRAME.origin.y))
+        p.addLine(to: CGPoint(x: NB.FRAME.origin.x, y: NB.FRAME.origin.y))
+        p.close()
         
         return p
     }()
@@ -77,74 +77,74 @@ class NBBlinkView: NBView {
         let cp1 = CGPoint(x: NB.FRAME.width * 0.375, y: c.y)
         let cp2 = CGPoint(x: NB.FRAME.width * 0.625, y: c.y)
         
-        p.moveToPoint(CGPoint(x: 0, y: c.y))
-        p.addLineToPoint(CGPoint(x: 10, y: c.y))
-        p.addCurveToPoint(CGPoint(x: NB.FRAME.width - 10, y: c.y), controlPoint1: cp1, controlPoint2: cp2)
-        p.addLineToPoint(CGPoint(x: NB.FRAME.width, y: c.y))
-        p.addLineToPoint(CGPoint(x: NB.FRAME.width, y: NB.FRAME.origin.y))
-        p.addLineToPoint(CGPoint(x: NB.FRAME.origin.x, y: NB.FRAME.origin.y))
-        p.closePath()
+        p.move(to: CGPoint(x: 0, y: c.y))
+        p.addLine(to: CGPoint(x: 10, y: c.y))
+        p.addCurve(to: CGPoint(x: NB.FRAME.width - 10, y: c.y), controlPoint1: cp1, controlPoint2: cp2)
+        p.addLine(to: CGPoint(x: NB.FRAME.width, y: c.y))
+        p.addLine(to: CGPoint(x: NB.FRAME.width, y: NB.FRAME.origin.y))
+        p.addLine(to: CGPoint(x: NB.FRAME.origin.x, y: NB.FRAME.origin.y))
+        p.close()
         
         return p
     }()
     
     convenience init() {
         self.init(frame: NB.FRAME)
-        userInteractionEnabled = false
+        isUserInteractionEnabled = false
         frame.origin.y += abs(NB.FRAME.origin.y)
-        backgroundColor = UIColor.clearColor()
+        backgroundColor = UIColor.clear
         
         toplid.fillColor = color
         toplid.strokeColor = color
-        toplid.path = topPathStart.CGPath
+        toplid.path = topPathStart.cgPath
         
         botlid.fillColor = color
         botlid.strokeColor = color
-        botlid.path = botPathStart.CGPath
+        botlid.path = botPathStart.cgPath
         
         layer.addSublayer(toplid)
         layer.addSublayer(botlid)
     }
     
-    private func close() {
+    fileprivate func close() {
         let topCloseAnimation = CABasicAnimation(keyPath: "path")
-        topCloseAnimation.timingFunction = UIView.functionWithType(CustomTimingFunctionQuadIn)
+        topCloseAnimation.timingFunction = UIView.function(withType: CustomTimingFunctionQuadIn)
         topCloseAnimation.duration = duration * 0.5
-        topCloseAnimation.fromValue = topPathStart.CGPath
-        topCloseAnimation.toValue = topPathEnd.CGPath
-        toplid.addAnimation(topCloseAnimation, forKey: "topCloseAnimation")
+        topCloseAnimation.fromValue = topPathStart.cgPath
+        topCloseAnimation.toValue = topPathEnd.cgPath
+        toplid.add(topCloseAnimation, forKey: "topCloseAnimation")
         
         let botCloseAnimation = CABasicAnimation(keyPath: "path")
-        botCloseAnimation.timingFunction = UIView.functionWithType(CustomTimingFunctionQuadInOut)
+        botCloseAnimation.timingFunction = UIView.function(withType: CustomTimingFunctionQuadInOut)
         botCloseAnimation.duration = duration * 0.5
-        botCloseAnimation.fromValue = botPathStart.CGPath
-        botCloseAnimation.toValue = botPathEnd.CGPath
-        botlid.addAnimation(botCloseAnimation, forKey: "botCloseAnimation")
+        botCloseAnimation.fromValue = botPathStart.cgPath
+        botCloseAnimation.toValue = botPathEnd.cgPath
+        botlid.add(botCloseAnimation, forKey: "botCloseAnimation")
         
-        toplid.path = topPathEnd.CGPath
-        botlid.path = botPathEnd.CGPath
+        toplid.path = topPathEnd.cgPath
+        botlid.path = botPathEnd.cgPath
     }
     
-    private func open() {
+    fileprivate func open() {
         let topCloseAnimation = CABasicAnimation(keyPath: "path")
-        topCloseAnimation.timingFunction = UIView.functionWithType(CustomTimingFunctionQuadIn)
+        topCloseAnimation.timingFunction = UIView.function(withType: CustomTimingFunctionQuadIn)
         topCloseAnimation.duration = duration
-        topCloseAnimation.fromValue = topPathEnd.CGPath
-        topCloseAnimation.toValue = topPathStart.CGPath
-        toplid.addAnimation(topCloseAnimation, forKey: "topCloseAnimation")
+        topCloseAnimation.fromValue = topPathEnd.cgPath
+        topCloseAnimation.toValue = topPathStart.cgPath
+        toplid.add(topCloseAnimation, forKey: "topCloseAnimation")
         
         let botCloseAnimation = CABasicAnimation(keyPath: "path")
-        botCloseAnimation.timingFunction = UIView.functionWithType(CustomTimingFunctionQuadInOut)
+        botCloseAnimation.timingFunction = UIView.function(withType: CustomTimingFunctionQuadInOut)
         botCloseAnimation.duration = duration
-        botCloseAnimation.fromValue = botPathEnd.CGPath
-        botCloseAnimation.toValue = botPathStart.CGPath
-        botlid.addAnimation(botCloseAnimation, forKey: "botCloseAnimation")
+        botCloseAnimation.fromValue = botPathEnd.cgPath
+        botCloseAnimation.toValue = botPathStart.cgPath
+        botlid.add(botCloseAnimation, forKey: "botCloseAnimation")
         
-        toplid.path = topPathStart.CGPath
-        botlid.path = botPathStart.CGPath
+        toplid.path = topPathStart.cgPath
+        botlid.path = botPathStart.cgPath
     }
     
-    func blink(onClosed closedCallback: NB.Callback = {}, onOpen openCallback: NB.Callback = {}) {
+    func blink(onClosed closedCallback: @escaping NB.Callback = {}, onOpen openCallback: @escaping NB.Callback = {}) {
         // cancel any ongoing blink
         
         close()

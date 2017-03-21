@@ -8,10 +8,10 @@
 
 import Foundation
 
-extension CollectionType {
+extension Collection {
     
     /// Return a copy of `self` with its elements shuffled
-    func shuffle() -> [Generator.Element] {
+    func shuffle() -> [Iterator.Element] {
         var list = Array(self)
         list.shuffleInPlace()
         return list

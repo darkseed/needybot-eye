@@ -8,13 +8,13 @@
 
 import Foundation
 
-public class ROSHandler: NSObject {
+open class ROSHandler: NSObject {
     
     public typealias Handle = ([String: AnyObject]) -> ()
     
-    public var handle: Handle
+    open var handle: Handle
     
-    public init(handle: ROSHandler.Handle) {
+    public init(handle: @escaping ROSHandler.Handle) {
         self.handle = handle
     }
 }

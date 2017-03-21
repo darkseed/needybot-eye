@@ -13,33 +13,33 @@ struct NBShape {
     
     internal typealias Complex = [[String: [Int]]]
 
-    static func createPath(shape: NBShape.Complex) -> UIBezierPath {
+    static func createPath(_ shape: NBShape.Complex) -> UIBezierPath {
         let path = UIBezierPath()
-        for (i, instruction) in shape.enumerate() {
+        for (i, instruction) in shape.enumerated() {
             if i == 0 {
                 for key in instruction {
                     if let inst = instruction[key.0] {
                         let x = CGFloat(inst[0])
                         let y = CGFloat(inst[1])
-                        let start = CGPointMake(x, y)
-                        path.moveToPoint(start)
+                        let start = CGPoint(x: x, y: y)
+                        path.move(to: start)
                     }
                 }
             }
             if let inst = instruction["line"] {
-                let target = CGPointMake(CGFloat(inst[2]), CGFloat(inst[3]))
-                path.addLineToPoint(target)
+                let target = CGPoint(x: CGFloat(inst[2]), y: CGFloat(inst[3]))
+                path.addLine(to: target)
             } else if let inst = instruction["bezier"] {
-                let target = CGPointMake(CGFloat(inst[6]), CGFloat(inst[7]))
-                let cp1 = CGPointMake(CGFloat(inst[2]), CGFloat(inst[3]))
-                let cp2 = CGPointMake(CGFloat(inst[4]), CGFloat(inst[5]))
-                path.addCurveToPoint(target, controlPoint1: cp1, controlPoint2: cp2)
+                let target = CGPoint(x: CGFloat(inst[6]), y: CGFloat(inst[7]))
+                let cp1 = CGPoint(x: CGFloat(inst[2]), y: CGFloat(inst[3]))
+                let cp2 = CGPoint(x: CGFloat(inst[4]), y: CGFloat(inst[5]))
+                path.addCurve(to: target, controlPoint1: cp1, controlPoint2: cp2)
             }
         }
         return path
     }
     
-    static func sizeOfShape(shape: NBShape.Complex) -> CGSize {
+    static func sizeOfShape(_ shape: NBShape.Complex) -> CGSize {
         var width: CGFloat = 0
         var height: CGFloat = 0
         
@@ -55,7 +55,7 @@ struct NBShape {
             }
         }
         
-        return CGSizeMake(width, height)
+        return CGSize(width: width, height: height)
     }
     
     // MARK: Shapes

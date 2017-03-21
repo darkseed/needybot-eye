@@ -11,14 +11,14 @@ import Foundation
 struct NBIdentityMsg: ROSMessage {
     
     enum Types: Int {
-        case None, Training, Recognition
+        case none, training, recognition
     }
     
-    private var _fullname: String
-    private var _type: Int
-    private var _uuid: String
+    fileprivate var _fullname: String
+    fileprivate var _type: Int
+    fileprivate var _uuid: String
     
-    mutating func fullname(fullname: String? = nil) -> String {
+    mutating func fullname(_ fullname: String? = nil) -> String {
         guard let fullname = fullname else {
             return _fullname
         }
@@ -26,7 +26,7 @@ struct NBIdentityMsg: ROSMessage {
         return _fullname
     }
     
-    mutating func type(type: NBIdentityMsg.Types? = nil) -> Int {
+    mutating func type(_ type: NBIdentityMsg.Types? = nil) -> Int {
         guard let type = type else {
             return _type
         }
@@ -34,11 +34,11 @@ struct NBIdentityMsg: ROSMessage {
         return _type
     }
     
-    mutating func uuid(uuid: String? = nil) -> String {
+    mutating func uuid(_ uuid: String? = nil) -> String {
         guard let uuid = uuid else {
             return _uuid
         }
-        guard let _ = NSUUID(UUIDString: uuid) else {
+        guard let _ = UUID(uuidString: uuid) else {
             NB.log("Invalid UUID, \(uuid)")
             return _uuid
         }
@@ -54,9 +54,9 @@ struct NBIdentityMsg: ROSMessage {
     
     func asMsg() -> [String : AnyObject] {
         return [
-            "fullname": _fullname,
-            "uuid": _uuid,
-            "type": _type,
+            "fullname": _fullname as AnyObject,
+            "uuid": _uuid as AnyObject,
+            "type": _type as AnyObject,
         ]
     }
 }

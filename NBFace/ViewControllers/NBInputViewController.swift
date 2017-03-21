@@ -11,9 +11,9 @@ import UIKit
 
 class NBInputViewController: UIViewController {
     
-    private var confirmationView: NBConfirmationView!
+    fileprivate var confirmationView: NBConfirmationView!
     // TODO: add other kinds of input views
-    private var currentView: NBInputView?
+    fileprivate var currentView: NBInputView?
     
     var isShowing = true
     
@@ -24,7 +24,7 @@ class NBInputViewController: UIViewController {
     
     override func loadView() {
         view = UIView()
-        view.frame = UIScreen.mainScreen().bounds
+        view.frame = UIScreen.main.bounds
         view.backgroundColor = NB.Colors.UIBackground
         
         confirmationView = NBConfirmationView()
@@ -34,7 +34,7 @@ class NBInputViewController: UIViewController {
         hide()
     }
     
-    func setInputType(inputType: NB.InputType, withData data: [String: AnyObject]? = nil) {
+    func setInputType(_ inputType: NB.InputType, withData data: [String: AnyObject]? = nil) {
         switch inputType {
             case .Confirm:
                 currentView = confirmationView
@@ -46,7 +46,7 @@ class NBInputViewController: UIViewController {
     }
     
     func show() {
-        view.hidden = false
+        view.isHidden = false
         isShowing = true
     }
     
@@ -55,7 +55,7 @@ class NBInputViewController: UIViewController {
             currentView.hide()
         }
         
-        view.hidden = true
+        view.isHidden = true
         isShowing = false
     }    
 }

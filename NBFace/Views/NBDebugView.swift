@@ -17,21 +17,21 @@ class NBDebugView: NBView {
     convenience init() {
         self.init(frame: NB.FRAME)
         
-        userInteractionEnabled = false
+        isUserInteractionEnabled = false
         
         let crosshairPath = UIBezierPath()
-        crosshairPath.moveToPoint(CGPointMake(NB.FRAME.width * 0.5, 0))
-        crosshairPath.addLineToPoint(CGPointMake(NB.FRAME.width * 0.5, NB.FRAME.height))
-        crosshairPath.moveToPoint(CGPointMake(0, NB.FRAME.height * 0.5))
-        crosshairPath.addLineToPoint(CGPointMake(NB.FRAME.width, NB.FRAME.height * 0.5))
+        crosshairPath.move(to: CGPoint(x: NB.FRAME.width * 0.5, y: 0))
+        crosshairPath.addLine(to: CGPoint(x: NB.FRAME.width * 0.5, y: NB.FRAME.height))
+        crosshairPath.move(to: CGPoint(x: 0, y: NB.FRAME.height * 0.5))
+        crosshairPath.addLine(to: CGPoint(x: NB.FRAME.width, y: NB.FRAME.height * 0.5))
         
-        crosshair.path = crosshairPath.CGPath
-        crosshair.strokeColor = UIColor.redColor().CGColor
+        crosshair.path = crosshairPath.cgPath
+        crosshair.strokeColor = UIColor.red.cgColor
         
-        outline.path = NBShape.createPath(NBShape.Debug.Outline).CGPath
-        outline.backgroundColor = UIColor(0, 0, 0, 0.2).CGColor
-        outline.strokeColor = UIColor.whiteColor().CGColor
-        outline.fillColor = UIColor.clearColor().CGColor
+        outline.path = NBShape.createPath(NBShape.Debug.Outline).cgPath
+        outline.backgroundColor = UIColor(0, 0, 0, 0.2).cgColor
+        outline.strokeColor = UIColor.white.cgColor
+        outline.fillColor = UIColor.clear.cgColor
         
         outline.transform = CATransform3DScale(outline.transform, 0.5, 0.5, 0)
         

@@ -10,26 +10,26 @@ import Foundation
 
 protocol NBManager: class {
     var handlers: [NBHandler] { get set }
-    func addHandler(handler: NBHandler) -> Bool
-    func removeHandler(handler: NBHandler) -> Bool
-    func runStack(args: Any?...)
+    func addHandler(_ handler: NBHandler) -> Bool
+    func removeHandler(_ handler: NBHandler) -> Bool
+    func runStack(_ args: Any?...)
 }
 
 extension NBManager {
     
-    func addHandler(handler: NBHandler) -> Bool {
-        guard let _ = handlers.indexOf(handler) else {
+    func addHandler(_ handler: NBHandler) -> Bool {
+        guard let _ = handlers.index(of: handler) else {
             handlers.append(handler)
             return true
         }
         return false
     }
     
-    func removeHandler(handler: NBHandler) -> Bool {
-        guard let idx = handlers.indexOf(handler) else {
+    func removeHandler(_ handler: NBHandler) -> Bool {
+        guard let idx = handlers.index(of: handler) else {
             return false
         }
-        handlers.removeAtIndex(idx)
+        handlers.remove(at: idx)
         return true
     }
     
@@ -37,7 +37,7 @@ extension NBManager {
         handlers = []
     }
     
-    func runStack(args: Any?...) {
+    func runStack(_ args: Any?...) {
         var toremove = [NBHandler]()
         for handler in handlers {
             handler.handle(args)

@@ -11,13 +11,13 @@ import UIKit
 
 extension CGRect {
     
-    func centerInRect(rect: CGRect, xOffset: CGFloat = 0, yOffset: CGFloat = 0) -> CGRect {
+    func centerInRect(_ rect: CGRect, xOffset: CGFloat = 0, yOffset: CGFloat = 0) -> CGRect {
         let x = (rect.width * 0.5 - size.width * 0.5) + xOffset
         let y = (rect.height * 0.5 - size.height * 0.5) + yOffset
-        return CGRectMake(x, y, size.width, size.height)
+        return CGRect(x: x, y: y, width: size.width, height: size.height)
     }
     
-    mutating func centerInRectMut(rect: CGRect, xOffset: CGFloat = 0, yOffset: CGFloat = 0) -> CGRect {
+    mutating func centerInRectMut(_ rect: CGRect, xOffset: CGFloat = 0, yOffset: CGFloat = 0) -> CGRect {
         let centered = self.centerInRect(rect, xOffset: xOffset, yOffset: yOffset)
         origin = centered.origin
         size = centered.size

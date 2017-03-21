@@ -10,11 +10,11 @@ import Foundation
 
 struct NBPathMsg: ROSMessage {
     
-    private var _width: CGFloat
-    private var _height: CGFloat
-    private var _points: [NBPoint2DMsg]
+    fileprivate var _width: CGFloat
+    fileprivate var _height: CGFloat
+    fileprivate var _points: [NBPoint2DMsg]
     
-    mutating func width(width: CGFloat? = nil) -> CGFloat {
+    mutating func width(_ width: CGFloat? = nil) -> CGFloat {
         guard let width = width else {
             return _width
         }
@@ -22,7 +22,7 @@ struct NBPathMsg: ROSMessage {
         return _width
     }
     
-    mutating func height(height: CGFloat? = nil) -> CGFloat {
+    mutating func height(_ height: CGFloat? = nil) -> CGFloat {
         guard let height = height else {
             return _height
         }
@@ -30,7 +30,7 @@ struct NBPathMsg: ROSMessage {
         return _height
     }
     
-    mutating func points(points: [NBPoint2DMsg]? = nil) -> [NBPoint2DMsg] {
+    mutating func points(_ points: [NBPoint2DMsg]? = nil) -> [NBPoint2DMsg] {
         guard let points = points else {
             return _points
         }
@@ -45,12 +45,12 @@ struct NBPathMsg: ROSMessage {
     func asMsg() -> [String : AnyObject] {
         var arr = [AnyObject]()
         for point in _points {
-            arr.append(point.asMsg())
+            arr.append(point.asMsg() as AnyObject)
         }
         return [
-            "width": _width,
-            "height": _height,
-            "points": arr
+            "width": _width as AnyObject,
+            "height": _height as AnyObject,
+            "points": arr as AnyObject
         ]
     }
 }

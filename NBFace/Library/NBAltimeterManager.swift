@@ -23,7 +23,7 @@ class NBAltimeterManager: NBManager {
         return _defaultManager!
     }
     
-    func handleAltitudeUpdate(data: CMAltitudeData) {
+    func handleAltitudeUpdate(_ data: CMAltitudeData) {
         runStack(data)
     }
     
@@ -33,13 +33,13 @@ class NBAltimeterManager: NBManager {
             return false
         }
         
-        guard let currentQueue = NSOperationQueue.currentQueue() else {
+        guard let currentQueue = OperationQueue.current else {
             return false
         }
         
-        altimeter.startRelativeAltitudeUpdatesToQueue(currentQueue) { [weak self] altitudeData, error in
+        altimeter.startRelativeAltitudeUpdates(to: currentQueue) { [weak self] altitudeData, error in
             if let error = error {
-                NB.log("error: \(error.userInfo)", caller: NBAltimeterManager.self)
+                NB.log("error: \(error._userInfo)", caller: NBAltimeterManager.self)
                 return
             }
             guard let data = altitudeData else { return }

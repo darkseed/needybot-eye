@@ -11,7 +11,7 @@ import UIKit
 
 class NBLabel: UILabel {
     
-    private var _fontSize: CGFloat = 34.0
+    fileprivate var _fontSize: CGFloat = 34.0
     var fontSize: CGFloat {
         get {
             return _fontSize
@@ -31,16 +31,16 @@ class NBLabel: UILabel {
     }
     
     init(text: String, fontSize: CGFloat = 34.0, numberOfLines: Int = 1, fontName: String = NB.Font.MavenProBold.rawValue) {
-        super.init(frame: CGRectZero)
+        super.init(frame: CGRect.zero)
         
         self.fontSize = fontSize
         textColor = NB.Colors.OffWhite
-        textAlignment = .Center
+        textAlignment = .center
         
         setText(text, numberOfLines: numberOfLines)
     }
     
-    func setText(text: String, numberOfLines: Int = 1) {
+    func setText(_ text: String, numberOfLines: Int = 1) {
         self.numberOfLines = numberOfLines
         self.text = text
         

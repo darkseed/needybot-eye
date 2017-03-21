@@ -12,25 +12,25 @@ import UIKit
 class NBLayerView: NBView {
     
     convenience init() {
-        self.init(frame: UIScreen.mainScreen().bounds)
+        self.init(frame: UIScreen.main.bounds)
         addImage(UIImage(), index: 0, hide: true)
     }
     
     // MARK: - Public API
     
-    func addImage(image: UIImage, index: Int = 0, hide: Bool = false) -> UIImageView {
+    func addImage(_ image: UIImage, index: Int = 0, hide: Bool = false) -> UIImageView {
         let v = UIImageView()
         v.frame = self.frame
         v.image = image
-        v.contentMode = .Center
+        v.contentMode = .center
         if hide {
             v.alpha = 0.0
         }
-        insertSubview(v, atIndex: index)
+        insertSubview(v, at: index)
         return v
     }
     
-    func crossFadeImage(image: UIImage, duration: NSTimeInterval = 0.25, onComplete: NB.Callback = {}) {
+    func crossFadeImage(_ image: UIImage, duration: TimeInterval = 0.25, onComplete: @escaping NB.Callback = {}) {
         if let top: UIImageView = getTopView() {
             // attempting to replace with same image, call complete callback and return
             if top.image == image {
@@ -38,10 +38,10 @@ class NBLayerView: NBView {
                 return
             }
             let bottom = addImage(image, index: 0, hide: true)
-            UIView.animateWithDuration(
-                duration,
+            UIView.animate(
+                withDuration: duration,
                 delay: 0,
-                options: .CurveEaseInOut,
+                options: UIViewAnimationOptions(),
                 animations: { _ in
                     top.alpha = 0.0
                     bottom.alpha = 1.0
@@ -59,7 +59,7 @@ class NBLayerView: NBView {
         return subviews[0] as? UIImageView
     }
     
-    func swapImage(image: UIImage) {
+    func swapImage(_ image: UIImage) {
         if let top: UIImageView = getTopView() {
             addImage(image, index: 0, hide: false)
             top.removeFromSuperview()

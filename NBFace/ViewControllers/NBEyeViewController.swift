@@ -11,9 +11,9 @@ import UIKit
 
 class NBEyeViewController: UIViewController {
     
-    private var eyeView: NBEyeAnimationView!
+    fileprivate var eyeView: NBEyeAnimationView!
     
-    private var isActive: Bool = false
+    fileprivate var isActive: Bool = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -22,7 +22,7 @@ class NBEyeViewController: UIViewController {
     
     override func loadView() {
         view = UIView()
-        view.frame = UIScreen.mainScreen().bounds
+        view.frame = UIScreen.main.bounds
         eyeView = NBEyeAnimationView()
         
         view.addSubview(eyeView)
@@ -50,7 +50,7 @@ class NBEyeViewController: UIViewController {
         eyeView.stop()
     }
 
-    func playEmotion(eyeEmotion: NB.EyeEmotion) {
+    func playEmotion(_ eyeEmotion: NB.EyeEmotion) {
         activate()
         
         eyeView.playEmotion(eyeEmotion)

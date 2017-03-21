@@ -32,10 +32,10 @@ class NBStateMachine: NSObject {
     /// Typealias for an array of statemachine handlers
     typealias CallbackStack = Dictionary<String, Callback?>
     
-    private var currentState: String?
-    private var currentTask: String?
-    private var deferredCallback: Callback?
-    private var locked = false
+    fileprivate var currentState: String?
+    fileprivate var currentTask: String?
+    fileprivate var deferredCallback: Callback?
+    fileprivate var locked = false
     
     var states = [String: [String: CallbackStack]]()
     
@@ -44,11 +44,11 @@ class NBStateMachine: NSObject {
         - Duplication: Attempted to define the same state more than once
         - Repeat: Attempted to transition to the currently set state
     */
-    enum StateMachineError: ErrorType {
+    enum StateMachineError: Error {
         /// Attempted to define the same state more than once
-        case Duplication
+        case duplication
         /// Attempted to transition to the currently set state
-        case Repeat
+        case `repeat`
     }
     
     /**
@@ -74,10 +74,10 @@ class NBStateMachine: NSObject {
         - Parameter off: Optional handler for when this state is transitioned away from
         - Throws: NBStateMachine.StateMachineError
     */
-    func addState(name: String, task: String! = "default", on: Callback! = nil, off: Callback! = nil) throws {
+    func addState(_ name: String, task: String! = "default", on: Callback! = nil, off: Callback! = nil) throws {
         if let t = states[task],
             let _ = t[name] {
-            throw StateMachineError.Duplication
+            throw StateMachineError.duplication
         }
         
         // If dict doesn't exist for task already, make sure to init it
@@ -101,7 +101,7 @@ class NBStateMachine: NSObject {
         - Parameter payload: Optional dictionary object to be passed to the `on` handler
         - Throws: NBStateMachine.StateMachineError
     */
-    func setState(state: String, payload: [String: AnyObject]?, task: String? = "default") throws {
+    func setState(_ state: String, payload: [String: AnyObject]?, task: String? = "default") throws {
         if locked {
             print("Attempted to set state \(state), but machine is locked.")
             return
@@ -121,8 +121,8 @@ class NBStateMachine: NSObject {
             task = "default"
         }
         
-        if let s = self.state, let t = self.task where task == t && state == s {
-            throw StateMachineError.Repeat
+        if let s = self.state, let t = self.task, task == t && state == s {
+            throw StateMachineError.repeat
         }
         
         let previous = self.state != nil ? self.state! : ""
@@ -130,20 +130,20 @@ class NBStateMachine: NSObject {
         currentState = state
         currentTask = task
 
-        deferredCallback?(["to": state])
+        deferredCallback?(["to": state as AnyObject])
         
         if let prevTaskList = states[task],
-           let deferred = prevTaskList[state]?["off"] where deferred != nil {
+           let deferred = prevTaskList[state]?["off"], deferred != nil {
             deferredCallback = deferred
         } else if let prevTaskList = states["default"],
-           let deferred = prevTaskList[state]?["off"] where deferred != nil {
+           let deferred = prevTaskList[state]?["off"], deferred != nil {
             deferredCallback = deferred
         } else {
             deferredCallback = nil
         }
         
-        if let callback = states[task]![state]?["on"] where callback != nil {
-            var finalPayload: [String: AnyObject] = ["from": previous]
+        if let callback = states[task]![state]?["on"], callback != nil {
+            var finalPayload: [String: AnyObject] = ["from": previous as AnyObject]
             if let _payload = payload {
                 finalPayload = NB.mergeDicts(finalPayload, _payload)
             }

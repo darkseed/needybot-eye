@@ -31,12 +31,12 @@ class NBEyeSad: NSObject, NBEyeAnimation {
         let eyeScaleAnim = CAKeyframeAnimation(keyPath: "transform")
         let eyeScaleAnimKeyTimesSeconds = [0, 0.5, 4.5, CGFloat(duration)]
         let eyeScaleAnimValues: [CGFloat] = [
-            NBAnimation.getScale(eyeLayer).x,
+            NBAnimation.getScale(eyeLayer!).x,
             0.5,
             0.5,
             NBAnimation.EyeValues.ScaleEyeIdle
         ]
-        eyeScaleAnim.keyTimes = NBAnimation.getKeyTimes(eyeScaleAnimKeyTimesSeconds, CGFloat(duration))
+        eyeScaleAnim.keyTimes = NBAnimation.getKeyTimes(eyeScaleAnimKeyTimesSeconds, CGFloat(duration)) as [NSNumber]?
         eyeScaleAnim.values = NBAnimation.getCAValues2DScale(eyeScaleAnimValues)
         eyeScaleAnim.timingFunctions = [
             CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseInEaseOut),
@@ -44,9 +44,9 @@ class NBEyeSad: NSObject, NBEyeAnimation {
             CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseInEaseOut)
         ]
         eyeScaleAnim.duration = duration
-        eyeLayer.addAnimation(eyeScaleAnim, forKey: NBAnimation.AnimationKey.Eye.rawValue)
+        eyeLayer?.add(eyeScaleAnim, forKey: NBAnimation.AnimationKey.Eye.rawValue)
         // update layer model with final values
-        eyeLayer.transform = CATransform3DMakeScale(eyeScaleAnimValues.last!, eyeScaleAnimValues.last!, 1.0)
+        eyeLayer?.transform = CATransform3DMakeScale(eyeScaleAnimValues.last!, eyeScaleAnimValues.last!, 1.0)
         
         // =================================================================
         // cornea animation
@@ -55,12 +55,12 @@ class NBEyeSad: NSObject, NBEyeAnimation {
         let corneaScaleAnim = CAKeyframeAnimation(keyPath: "transform")
         let corneaScaleAnimKeyTimesSeconds: [CGFloat] = [0, 0.5, 4.5, CGFloat(duration)]
         let corneaScaleAnimValues: [CGFloat] = [
-            NBAnimation.getScale(corneaLayer).x,
+            NBAnimation.getScale(corneaLayer!).x,
             0.5,
             0.5,
             NBAnimation.EyeValues.ScaleCorneaIdle
         ]
-        corneaScaleAnim.keyTimes = NBAnimation.getKeyTimes(corneaScaleAnimKeyTimesSeconds, CGFloat(duration))
+        corneaScaleAnim.keyTimes = NBAnimation.getKeyTimes(corneaScaleAnimKeyTimesSeconds, CGFloat(duration)) as [NSNumber]?
         corneaScaleAnim.values = NBAnimation.getCAValues2DScale(corneaScaleAnimValues)
         corneaScaleAnim.timingFunctions = [
             CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseInEaseOut),
@@ -71,7 +71,7 @@ class NBEyeSad: NSObject, NBEyeAnimation {
         // - cornea position
         let corneaPosAnim = CAKeyframeAnimation(keyPath:"position")
         let corneaPosAnimKeyTimesSeconds: [CGFloat] = [0, 0.5, 2.25, 2.75, 4.5, CGFloat(duration)]
-        let corneaFromPos = NBAnimation.getPosition(corneaLayer)
+        let corneaFromPos = NBAnimation.getPosition(corneaLayer!)
         let corneaToPos1 = NBEyeAnimationView.getCorneaLookPosition(NBAnimation.getRandomAngle(), withScale: 0.5)
         let corneaToPos2 = NBEyeAnimationView.getCorneaLookPosition(NBAnimation.getRandomAngle(), withScale: 0.5)
         let corneaEndPos = CGPoint(x: 500.0, y: 500.0)
@@ -83,7 +83,7 @@ class NBEyeSad: NSObject, NBEyeAnimation {
             corneaToPos2,           // 1.75
             corneaEndPos            // 0.5
         ]
-        corneaPosAnim.keyTimes = NBAnimation.getKeyTimes(corneaPosAnimKeyTimesSeconds, CGFloat(duration))
+        corneaPosAnim.keyTimes = NBAnimation.getKeyTimes(corneaPosAnimKeyTimesSeconds, CGFloat(duration)) as [NSNumber]?
         corneaPosAnim.values = NBAnimation.getCAValuesPosition(corneaPosAnimValues)
         corneaPosAnim.timingFunctions = [
             CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseInEaseOut),
@@ -96,21 +96,21 @@ class NBEyeSad: NSObject, NBEyeAnimation {
         let corneaAnimGroup: CAAnimationGroup = CAAnimationGroup()
         corneaAnimGroup.animations = [corneaPosAnim, corneaScaleAnim]
         corneaAnimGroup.duration = duration
-        corneaLayer.addAnimation(corneaAnimGroup, forKey: NBAnimation.AnimationKey.Cornea.rawValue)
+        corneaLayer?.add(corneaAnimGroup, forKey: NBAnimation.AnimationKey.Cornea.rawValue)
         // update layer model with final values
-        corneaLayer.position = corneaEndPos
-        corneaLayer.transform = CATransform3DMakeScale(corneaScaleAnimValues.last!, corneaScaleAnimValues.last!, 1.0)
+        corneaLayer?.position = corneaEndPos
+        corneaLayer?.transform = CATransform3DMakeScale(corneaScaleAnimValues.last!, corneaScaleAnimValues.last!, 1.0)
         
 
         // =================================================================
         // iris animation
         // =================================================================
         let irisAnim = CABasicAnimation(keyPath: "fillColor")
-        irisAnim.timingFunction = UIView.functionWithType(CustomTimingFunctionQuadIn)
+        irisAnim.timingFunction = UIView.function(withType: CustomTimingFunctionQuadIn)
         irisAnim.duration = 0.5
-        irisAnim.toValue = NBEyeAnimationView.EyeColors.IrisSad.CGColor
-        irisDiffuseLayer.addAnimation(irisAnim, forKey: NBAnimation.AnimationKey.Iris.rawValue)
-        irisDiffuseLayer.fillColor = NBEyeAnimationView.EyeColors.IrisSad.CGColor
+        irisAnim.toValue = NBEyeAnimationView.EyeColors.IrisSad.cgColor
+        irisDiffuseLayer?.add(irisAnim, forKey: NBAnimation.AnimationKey.Iris.rawValue)
+        irisDiffuseLayer?.fillColor = NBEyeAnimationView.EyeColors.IrisSad.cgColor
         
         // =================================================================
         // eyelid animation
@@ -120,29 +120,29 @@ class NBEyeSad: NSObject, NBEyeAnimation {
         let eyelidUpperAnimKeyTimesSeconds: [CGFloat] = [0, 1.5]
         let eyelidUpperAnimValues: [CGPath] = [
             eyelidUpperCurrentPath,
-            EyelidPaths.UpperSadOpen.CGPath
+            EyelidPaths.UpperSadOpen.cgPath
         ]
-        eyelidUpperAnim.keyTimes = NBAnimation.getKeyTimes(eyelidUpperAnimKeyTimesSeconds, 1.5)
+        eyelidUpperAnim.keyTimes = NBAnimation.getKeyTimes(eyelidUpperAnimKeyTimesSeconds, 1.5) as [NSNumber]?
         eyelidUpperAnim.values = eyelidUpperAnimValues
         eyelidUpperAnim.timingFunctions = [
             CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseInEaseOut)
         ]
-        animationView.eyelidUpperLayer.addAnimation(eyelidUpperAnim, forKey: NBAnimation.AnimationKey.EyelidUpper.rawValue)
-        animationView.eyelidUpperLayer.path = EyelidPaths.UpperSadOpen.CGPath
+        animationView.eyelidUpperLayer.add(eyelidUpperAnim, forKey: NBAnimation.AnimationKey.EyelidUpper.rawValue)
+        animationView.eyelidUpperLayer.path = EyelidPaths.UpperSadOpen.cgPath
         
         let eyelidLowerAnim = CAKeyframeAnimation(keyPath: "path")
         let eyelidLowerCurrentPath = NBAnimation.getPresentationShapeLayer(animationView.eyelidLowerLayer).path!
         let eyelidLowerAnimKeyTimesSeconds: [CGFloat] = [0, 1.5]
         let eyelidLowerAnimValues: [CGPath] = [
             eyelidLowerCurrentPath,
-            EyelidPaths.LowerSadOpen.CGPath
+            EyelidPaths.LowerSadOpen.cgPath
         ]
-        eyelidLowerAnim.keyTimes = NBAnimation.getKeyTimes(eyelidLowerAnimKeyTimesSeconds, 1.5)
+        eyelidLowerAnim.keyTimes = NBAnimation.getKeyTimes(eyelidLowerAnimKeyTimesSeconds, 1.5) as [NSNumber]?
         eyelidLowerAnim.values = eyelidLowerAnimValues
         eyelidLowerAnim.timingFunctions = [
             CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseInEaseOut)
         ]
-        animationView.eyelidLowerLayer.addAnimation(eyelidLowerAnim, forKey: NBAnimation.AnimationKey.EyelidLower.rawValue)
-        animationView.eyelidLowerLayer.path = EyelidPaths.LowerSadOpen.CGPath
+        animationView.eyelidLowerLayer.add(eyelidLowerAnim, forKey: NBAnimation.AnimationKey.EyelidLower.rawValue)
+        animationView.eyelidLowerLayer.path = EyelidPaths.LowerSadOpen.cgPath
     }
 }

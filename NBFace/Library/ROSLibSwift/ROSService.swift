@@ -8,15 +8,15 @@
 
 import Foundation
 
-public class ROSService: NSObject {
+open class ROSService: NSObject {
     
-    public let op = "call_service"
-    public let service: String
-    public let type: String
+    open let op = "call_service"
+    open let service: String
+    open let type: String
     
-    public var args: [String: AnyObject]?
-    public var id = NSUUID().UUIDString
-    public var serviceCallback: ROSHandler?
+    open var args: [String: AnyObject]?
+    open var id = UUID().uuidString
+    open var serviceCallback: ROSHandler?
     
     init(service: String, type: String, args: [String: AnyObject]?) {
         self.service = service
@@ -24,14 +24,14 @@ public class ROSService: NSObject {
         self.args = args
     }
     
-    public func callService(callback: ROSHandler?) {
+    open func callService(_ callback: ROSHandler?) {
         var message: [String: AnyObject] = [
-            "op": op,
-            "service": service,
-            "id": id
+            "op": op as AnyObject,
+            "service": service as AnyObject,
+            "id": id as AnyObject
         ]
         if let args = args {
-            message["args"] = args
+            message["args"] = args as AnyObject?
         }
         serviceCallback = callback
         let payload = ROS.objectToJSONString(message)

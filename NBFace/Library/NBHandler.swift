@@ -13,7 +13,7 @@ class NBHandler: NSObject {
     var handle: (Any?...) -> ()
     var oneshot: Bool = false
     
-    init(oneshot: Bool = false, handle: (Any?...) -> ()) {
+    init(oneshot: Bool = false, handle: @escaping (Any?...) -> ()) {
         self.handle = handle
         self.oneshot = oneshot
         super.init()

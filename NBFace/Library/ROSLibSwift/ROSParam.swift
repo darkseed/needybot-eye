@@ -16,8 +16,8 @@ class ROSParam: NSObject {
         self.name = name
     }
     
-    func get(callback: ROSHandler) {
-        let service = ROSService(service: "/rosapi/get_param", type: "rosapi/GetParam", args: ["name": self.name])
+    func get(_ callback: ROSHandler) {
+        let service = ROSService(service: "/rosapi/get_param", type: "rosapi/GetParam", args: ["name": self.name as AnyObject])
         service.callService(ROSHandler() { data in
             callback.handle(data)
         })

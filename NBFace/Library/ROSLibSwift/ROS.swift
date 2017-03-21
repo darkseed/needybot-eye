@@ -9,38 +9,38 @@
 import Foundation
 import SocketRocket
 
-public class ROS: NSObject, SRWebSocketDelegate {
+open class ROS: NSObject, SRWebSocketDelegate {
     
-    public static let sharedInstance = ROS()
+    open static let sharedInstance = ROS()
     
-    private var connectCallback: ROSHandler?
-    private var connectTimer: NSTimer?
-    private var isConnected = false
-    private var queue = [NSString]()
-    private var services = [ROSService]()
-    private var socket: SRWebSocket?
-    private var subscribers = [ROSTopic]()
-    private var url: String?
-    private var nsurl: NSURL?
+    fileprivate var connectCallback: ROSHandler?
+    fileprivate var connectTimer: Timer?
+    fileprivate var isConnected = false
+    fileprivate var queue = [NSString]()
+    fileprivate var services = [ROSService]()
+    fileprivate var socket: SRWebSocket?
+    fileprivate var subscribers = [ROSTopic]()
+    fileprivate var url: String?
+    fileprivate var nsurl: URL?
     
-    public static func fromJSON(jsonString: String) -> [String: AnyObject]? {
-        guard let data = jsonString.dataUsingEncoding(NSUTF8StringEncoding) else {
+    open static func fromJSON(_ jsonString: String) -> [String: AnyObject]? {
+        guard let data = jsonString.data(using: String.Encoding.utf8) else {
             return nil
         }
-        guard let json = try? NSJSONSerialization.JSONObjectWithData(data, options: .MutableContainers) else {
+        guard let json = try? JSONSerialization.jsonObject(with: data, options: .mutableContainers) else {
             return nil
         }
         return json as? [String: AnyObject]
     }
     
-    public static func template(key: String, _ value: String, _ isRaw: Bool = false) -> String {
+    open static func template(_ key: String, _ value: String, _ isRaw: Bool = false) -> String {
         if isRaw {
             return "\"\(key)\": \(value)"
         }
         return "\"\(key)\": \"\(value)\""
     }
     
-    public static func objectToJSONString(object: [String: AnyObject]) -> String {
+    open static func objectToJSONString(_ object: [String: AnyObject]) -> String {
         var arr: [String] = []
         
         for (k, v) in object {
@@ -56,7 +56,7 @@ public class ROS: NSObject, SRWebSocketDelegate {
                 for n in val {
                     a.append(objectToJSONString(n))
                 }
-                arr.append("\"\(k)\": [\(a.joinWithSeparator(","))]")
+                arr.append("\"\(k)\": [\(a.joined(separator: ","))]")
                 continue
             }
             
@@ -68,7 +68,7 @@ public class ROS: NSObject, SRWebSocketDelegate {
                     for n in val {
                         a.append("\"\(n)\"")
                     }
-                    s = "\"\(k)\": [\(a.joinWithSeparator(","))]"
+                    s = "\"\(k)\": [\(a.joined(separator: ","))]"
                 } else {
                     s = template(k, "\(val)", true)
                 }
@@ -84,7 +84,7 @@ public class ROS: NSObject, SRWebSocketDelegate {
             
             // handle floats and ints
             if let val = v as? Float64 {
-                let isInt = String(v) != String(val)
+                let isInt = String(describing: v) != String(val)
                 if isInt {
                     arr.append(template(k, "\(Int(val))", true))
                     continue
@@ -100,12 +100,12 @@ public class ROS: NSObject, SRWebSocketDelegate {
             }
         }
         
-        let joined = arr.joinWithSeparator(", ")
+        let joined = arr.joined(separator: ", ")
         return "{ \(joined) }"
     }
     
-    public func connect(url: String, _ callback: ROSHandler? = nil) /*throws*/ {
-        guard let nsurl = NSURL(string: url) else {
+    open func connect(_ url: String, _ callback: ROSHandler? = nil) /*throws*/ {
+        guard let nsurl = URL(string: url) else {
             NSLog("Invalid connection url")
             return
         }
@@ -115,39 +115,39 @@ public class ROS: NSObject, SRWebSocketDelegate {
         NB.log("Preparing to connect to ROS on url \(url) ...")
         self.nsurl = nsurl
         self.url = url
-        connectTimer = NSTimer.schedule(repeatInterval: 5.0) { timer in
+        connectTimer = Timer.schedule(repeatInterval: 5.0) { timer in
             if !self.isConnected {
                 NSLog("ROS is not connected, retrying in 5 seconds...")
-                self.socket = SRWebSocket(URL: nsurl)
+                self.socket = SRWebSocket(url: nsurl)
                 self.socket?.delegate = self
                 self.socket?.open()
             } else {
-                timer.invalidate()
+                timer?.invalidate()
             }
         }
     }
     
-    public func close() {
+    open func close() {
         socket?.close()
     }
     
-    public func registerService(service: ROSService) -> Bool {
-        guard let _ = services.indexOf(service) else {
+    open func registerService(_ service: ROSService) -> Bool {
+        guard let _ = services.index(of: service) else {
             services.append(service)
             return true
         }
         return false
     }
     
-    public func registerSubscriber(topic: ROSTopic) -> Bool {
-        guard let _ = subscribers.indexOf(topic) else {
+    open func registerSubscriber(_ topic: ROSTopic) -> Bool {
+        guard let _ = subscribers.index(of: topic) else {
             subscribers.append(topic)
             return true
         }
         return false
     }
     
-    public func send(message: String) {
+    open func send(_ message: String) {
         let message = NSString(string: message)
         if !isConnected {
             queue.append(message)
@@ -156,7 +156,7 @@ public class ROS: NSObject, SRWebSocketDelegate {
         socket?.send(message)
     }
     
-    public func sendNSString(message: NSString) {
+    open func sendNSString(_ message: NSString) {
         if !isConnected {
             queue.append(message)
             return
@@ -164,23 +164,23 @@ public class ROS: NSObject, SRWebSocketDelegate {
         socket?.send(message)
     }
     
-    public func unregisterService(service: ROSService) -> Bool {
-        guard let idx = services.indexOf(service) else {
+    open func unregisterService(_ service: ROSService) -> Bool {
+        guard let idx = services.index(of: service) else {
             return false
         }
-        services.removeAtIndex(idx)
+        services.remove(at: idx)
         return true
     }
     
-    public func unregisterSubscriber(topic: ROSTopic) -> Bool {
-        guard let idx = subscribers.indexOf(topic) else {
+    open func unregisterSubscriber(_ topic: ROSTopic) -> Bool {
+        guard let idx = subscribers.index(of: topic) else {
             return false
         }
-        subscribers.removeAtIndex(idx)
+        subscribers.remove(at: idx)
         return true
     }
     
-    public func webSocket(webSocket: SRWebSocket!, didReceiveMessage message: AnyObject!) {
+    open func webSocket(_ webSocket: SRWebSocket!, didReceiveMessage message: Any!) {
         guard let message = message as? String,
             let msg = ROS.fromJSON(message) else {
                 return
@@ -207,7 +207,7 @@ public class ROS: NSObject, SRWebSocketDelegate {
         }
     }
     
-    public func webSocketDidOpen(webSocket: SRWebSocket!) {
+    open func webSocketDidOpen(_ webSocket: SRWebSocket!) {
         NSLog("ROSLibSwift connected to \(url!)")
         connectTimer?.invalidate()
         isConnected = true
@@ -217,7 +217,7 @@ public class ROS: NSObject, SRWebSocketDelegate {
         }
     }
     
-    public func webSocket(webSocket: SRWebSocket!, didCloseWithCode code: Int, reason: String!, wasClean: Bool) {
+    open func webSocket(_ webSocket: SRWebSocket!, didCloseWithCode code: Int, reason: String!, wasClean: Bool) {
         NSLog("ROS disconnected with code: \(code), reason: \(reason)")
         guard let url = url else { return }
         NSLog("Attempting to reconnect...")

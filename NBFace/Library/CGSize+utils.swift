@@ -10,14 +10,14 @@ import Foundation
 import UIKit
 
 func +(left: CGSize, right: CGSize) -> CGSize {
-    var size = CGSizeZero
+    var size = CGSize.zero
     size.width = left.width + right.width
     size.height = left.height + right.height
     return size
 }
 
 func *(left: CGSize, right: CGFloat) -> CGSize {
-    var size = CGSizeZero
+    var size = CGSize.zero
     size.width = left.width * right
     size.height = left.height * right
     return size
