@@ -1,6 +1,16 @@
 {
   "images" : [
     {
+      "idiom" : "ipad",
+      "size" : "20x20",
+      "scale" : "1x"
+    },
+    {
+      "idiom" : "ipad",
+      "size" : "20x20",
+      "scale" : "2x"
+    },
+    {
       "size" : "29x29",
       "idiom" : "ipad",
       "filename" : "Needybot_ipad-appicon-1.png",
@@ -39,8 +49,8 @@
     {
       "size" : "83.5x83.5",
       "idiom" : "ipad",
-      "scale" : "2x",
       "filename" : "Needybot_ipad-appicon-4@2x.png",
+      "scale" : "2x"
     }
   ],
   "info" : {

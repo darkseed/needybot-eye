@@ -12,7 +12,7 @@
 			<key>Key</key>
 			<string>rosbridge_url</string>
 			<key>DefaultValue</key>
-			<string>ws://10.42.1.1:9090</string>
+			<string>ws://34.252.108.201:9090</string>
 		</dict>
 		<dict>
 			<key>Type</key>
