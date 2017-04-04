@@ -1,6 +1,6 @@
 PODS:
   - AsyncSwift (2.0.1)
-  - AudioKit (3.5.3)
+  - AudioKit (3.5.4)
   - FLAnimatedImage (1.0.12)
   - SocketRocket (0.5.1)
   - Yaml (3.3.1)
@@ -23,7 +23,7 @@ CHECKOUT OPTIONS:
 
 SPEC CHECKSUMS:
   AsyncSwift: 2d4d6551827ccd774c525d6c16c0deea94ac5f44
-  AudioKit: bf2ebc611bb9b8107dcbe14f8356c761ee8fcc12
+  AudioKit: 6525139893b171361b9599ac85dcda6d78865398
   FLAnimatedImage: 4a0b56255d9b05f18b6dd7ee06871be5d3b89e31
   SocketRocket: d57c7159b83c3c6655745cd15302aa24b6bae531
   Yaml: 18b2cf7301c4132e2bbb508a6921d2637ed3046c

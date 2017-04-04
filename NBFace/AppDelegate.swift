@@ -20,7 +20,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             "y_offset": "-75" as AnyObject,
             "host": "turtlebot" as AnyObject,
             "confidence_threshold": 0.8 as AnyObject,
-            "rosbridge_url": "ws://34.252.108.201:9090" as AnyObject
+            "rosbridge_url": "ws://localhost:9090" as AnyObject
         ]
         UserDefaults.standard.register(defaults: appDefaults)
         UserDefaults.standard.synchronize()
